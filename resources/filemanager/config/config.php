@@ -65,6 +65,17 @@ $config = array(
      */
     'version' => $version,
 
+    /**
+     * Set filemanager route prefix
+     */
+    'route_prefix' => 'filemanager/',
+
+    /**
+     * Set middleware for authentication. default is web
+     */
+    'middleware' => 'web',
+
+
     /*
     |--------------------------------------------------------------------------
     | DON'T TOUCH (base url (only domain) of site).
@@ -509,7 +520,7 @@ $config = array(
     // Hidden files and folders
     //**********************
     // set the names of any folders you want hidden (eg "hidden_folder1", "hidden_folder2" ) Remember all folders with these names will be hidden (you can set any exceptions in config.php files on folders)
-    'hidden_folders'                          => array(),
+    'hidden_folders' => array('thumbs',$thumbs_base_path),
     // set the names of any files you want hidden. Remember these names will be hidden in all folders (eg "this_document.pdf", "that_image.jpg" )
     'hidden_files'                            => array('config.php'),
 
@@ -635,40 +646,3 @@ return array_merge(
         ),
     )
 );
-
-/**
- * Needed to autogenerate folder
- * Create directory for images and/or thumbnails
- *
- * @param  string  $path
- * @param  string  $path_thumbs
- */
-$create_folder = function ($path = null, $path_thumbs = null, $ftp = null, $config = null) {
-    if ($ftp) {
-        return $ftp->mkdir($path) || $ftp->mkdir($path_thumbs);
-    } else {
-        if (file_exists($path) || file_exists($path_thumbs)) {
-            return false;
-        }
-        $oldumask = umask(0);
-        $permission = 0755;
-        $output = false;
-        if (isset($config['folderPermission'])) {
-            $permission = $config['folderPermission'];
-        }
-        if ($path && !file_exists($path)) {
-            $output = mkdir($path, $permission, true);
-        } // or even 01777 so you get the sticky bit set
-        if ($path_thumbs) {
-            $output = mkdir($path_thumbs, $permission, true) or die("$path_thumbs cannot be found");
-        } // or even 01777 so you get the sticky bit set
-        umask($oldumask);
-        return $output;
-    }
-};
-
-// TRY AUTO GENERATE FOLDER
-$create_folder($upload_dir);
-$create_folder($current_path);
-$create_folder($thumbs_upload_dir);
-$create_folder($thumbs_base_path);

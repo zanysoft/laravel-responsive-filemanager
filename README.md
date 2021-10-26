@@ -72,7 +72,8 @@ Files are meant to be stored in public folder.
 
 **Don't forget to set upload dir in config file**
 
-    'upload_dir' => '/media/',
+    $upload_dir = 'media/';
+    $thumbs_upload_dir = 'thumbs/'; //this will create inside upload directory
     
 **Set route prefix in config file**
 

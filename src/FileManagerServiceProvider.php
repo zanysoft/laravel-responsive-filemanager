@@ -4,6 +4,7 @@ namespace ZanySoft\ResponsiveFileManager;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class FileManagerServiceProvider extends ServiceProvider
 {
@@ -38,15 +39,15 @@ class FileManagerServiceProvider extends ServiceProvider
 
         $config = \Config::get('rfm');
 
-        $upload_dir = $config['upload_dir'];
+        $upload_dir = trim($config['upload_dir'], '/') . '/';
         $current_path = $config['current_path'];
-        $thumbs_upload_dir = $config['thumbs_upload_dir'];
-        $thumbs_base_path = $config['thumbs_base_path'];
+        $thumbs_upload_dir = ltrim($config['thumbs_upload_dir'], '/');
+        $thumbs_base_path = ltrim($config['thumbs_base_path'], '/');
 
-        $this->createDir($upload_dir);
-        $this->createDir($current_path);
-        $this->createDir($thumbs_upload_dir);
-        $this->createDir($thumbs_base_path);
+        $this->createDir($upload_dir, $config);
+        $this->createDir($current_path, $config);
+        $this->createDir($upload_dir . $thumbs_upload_dir, $config);
+        $this->createDir($upload_dir . $thumbs_base_path, $config);
 
         // Add package routes.
         $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
@@ -212,28 +213,27 @@ class FileManagerServiceProvider extends ServiceProvider
         });
     }
 
-    protected function createDir($path = null, $path_thumbs = null, $ftp = null, $config = null)
+    protected function createDir($path, $config = null)
     {
-        if ($ftp) {
-            return $ftp->mkdir($path) || $ftp->mkdir($path_thumbs);
-        } else {
-            if (file_exists($path) || file_exists($path_thumbs)) {
-                return false;
-            }
-            $oldumask = umask(0);
-            $permission = 0755;
-            $output = false;
-            if (isset($config['folderPermission'])) {
-                $permission = $config['folderPermission'];
-            }
-            if ($path && !file_exists($path)) {
-                $output = mkdir($path, $permission, true);
-            } // or even 01777 so you get the sticky bit set
-            if ($path_thumbs) {
-                $output = mkdir($path_thumbs, $permission, true) or die("$path_thumbs cannot be found");
-            } // or even 01777 so you get the sticky bit set
-            umask($oldumask);
-            return $output;
+        if (!Str::startsWith($path, public_path('/'))) {
+            $path = public_path($path);
         }
+
+        if (file_exists($path)) {
+            return false;
+        }
+        
+        $oldumask = umask(0);
+        $permission = 0755;
+        $output = false;
+        if (isset($config['folderPermission'])) {
+            $permission = $config['folderPermission'];
+        }
+        if ($path && !file_exists($path)) {
+            $output = mkdir($path, $permission, true);
+        } // or even 01777 so you get the sticky bit set
+
+        umask($oldumask);
+        return $output;
     }
 }
