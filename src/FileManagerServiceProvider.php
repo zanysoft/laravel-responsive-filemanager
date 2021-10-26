@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 class FileManagerServiceProvider extends ServiceProvider
 {
     protected $commands = [
-        'ZanySoft\ResponsiveFileManager\RFMGenerate'
+        'ZanySoft\ResponsiveFileManager\Commands\RFMGenerate'
     ];
 
     /**
