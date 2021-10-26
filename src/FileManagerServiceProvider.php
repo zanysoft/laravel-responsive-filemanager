@@ -11,6 +11,23 @@ class FileManagerServiceProvider extends ServiceProvider
         'ZanySoft\ResponsiveFileManager\Commands\RFMGenerate'
     ];
 
+
+    /**
+     * Overwrite any vendor / package configuration.
+     *
+     * This service provider is intended to provide a convenient location for you
+     * to overwrite any "vendor" or package configuration that you may want to
+     * modify before the application handles the incoming request / command.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->commands($this->commands);
+
+        require_once 'Helpers/helpers.php';
+    }
+
     /**
      * Bootstrap any application services.
      *
@@ -18,6 +35,18 @@ class FileManagerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        $config = \Config::get('rfm');
+
+        $upload_dir = $config['upload_dir'];
+        $current_path = $config['current_path'];
+        $thumbs_upload_dir = $config['thumbs_upload_dir'];
+        $thumbs_base_path = $config['thumbs_base_path'];
+
+        $this->createDir($upload_dir);
+        $this->createDir($current_path);
+        $this->createDir($thumbs_upload_dir);
+        $this->createDir($thumbs_base_path);
 
         // Add package routes.
         $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
@@ -103,7 +132,7 @@ class FileManagerServiceProvider extends ServiceProvider
             'icon-d.svg', 'svg.svg'
         ];
 
-        $FMVENDOR_PREP = [
+        $FM_VENDOR_PREP = [
             '/' => $FM_SCRIPT,
             'css/' => $FM_CSS,
             'js/' => $FM_JS,
@@ -113,9 +142,9 @@ class FileManagerServiceProvider extends ServiceProvider
         ];
         $FM_VENDOR = [];
 
-        foreach ($FMVENDOR_PREP as $folder_path => $file_table) {
+        foreach ($FM_VENDOR_PREP as $folder_path => $file_table) {
             foreach ($file_table as $file) {
-                $FMVENDOR[$file] = $FMPUBPATH . $folder_path . $file;
+                $FM_VENDOR[$file] = $FMPUBPATH . $folder_path . $file;
             }
         }
 
@@ -137,39 +166,74 @@ class FileManagerServiceProvider extends ServiceProvider
         });
 
         Blade::directive('filemanager_get_key', function () {
-            $o = isset(config('rfm.access_keys')[0]) ? config('rfm.access_keys')[0] : '';//phpcs:ignore
-            return urlencode($o);
+            return filemanager_get_key();
         });
 
-        Blade::directive('filemanager_get_resource', function ($file) use ($FMVENDOR) {
-            $r = parse_url(route('FM' . $file), PHP_URL_PATH);
+        Blade::directive('filemanager_get_config', function ($expression) {
+            return filemanager_get_config($expression);
+        });
+
+        Blade::directive('filemanager_get_resource', function ($file) use ($FM_VENDOR) {
+            $r = parse_url(route('filemanager.' . $file), PHP_URL_PATH);
             if ($r) {
                 return $r;
             }
-            if (isset($FMVENDOR[$file])) {
-                return $FMVENDOR[$file];
+            if (isset($FM_VENDOR[$file])) {
+                return $FM_VENDOR[$file];
             }
             if (config('app.debug')) {
                 throw new \Exception('unkow file ' . $file . ' in Reponsive File Manager');//phpcs:ignore
             }
         });
 
-        Blade::directive('filemanager_get_config', function ($expression) {
-            return config($expression);
+        Blade::directive('filemanager_dialog', function ($params) use ($FM_VENDOR, $config) {
+
+            $r = parse_url(route('filemanager.dialog.php'), PHP_URL_PATH);
+            if ($r) {
+                if ($params) {
+                    eval("\$query_data = $params;");
+                } else {
+                    $query_data = [];
+                }
+
+                if (!isset($query_data['akey'])) {
+                    $query_data['akey'] = filemanager_get_key();
+                }
+
+                if (!isset($query_data['lang'])) {
+                    $query_data['lang'] = $config['default_language'] ?? '';
+                }
+                return $r . '?' . http_build_query($query_data);
+            }
+
+            if (config('app.debug')) {
+                throw new \Exception('unkow file dialog.php in Reponsive File Manager');//phpcs:ignore
+            }
         });
     }
 
-    /**
-     * Overwrite any vendor / package configuration.
-     *
-     * This service provider is intended to provide a convenient location for you
-     * to overwrite any "vendor" or package configuration that you may want to
-     * modify before the application handles the incoming request / command.
-     *
-     * @return void
-     */
-    public function register()
+    protected function createDir($path = null, $path_thumbs = null, $ftp = null, $config = null)
     {
-        $this->commands($this->commands);
+        if ($ftp) {
+            return $ftp->mkdir($path) || $ftp->mkdir($path_thumbs);
+        } else {
+            if (file_exists($path) || file_exists($path_thumbs)) {
+                return false;
+            }
+            $oldumask = umask(0);
+            $permission = 0755;
+            $output = false;
+            if (isset($config['folderPermission'])) {
+                $permission = $config['folderPermission'];
+            }
+            if ($path && !file_exists($path)) {
+                $output = mkdir($path, $permission, true);
+            } // or even 01777 so you get the sticky bit set
+            if ($path_thumbs) {
+                $output = mkdir($path_thumbs, $permission, true) or die("$path_thumbs cannot be found");
+            } // or even 01777 so you get the sticky bit set
+            umask($oldumask);
+            return $output;
+        }
     }
 }

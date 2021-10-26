@@ -282,6 +282,14 @@ $field_id = isset($_GET['field_id']) ? RFM::fixGetParams($_GET['field_id']) : nu
 $type_param = RFM::fixGetParams($_GET['type']);
 $apply = null;
 
+if ($type_param > 0 && !empty($field_id)) {
+    if (!isset($_GET['multiple']) || (isset($_GET['multiple']) && $_GET['multiple'] == 0)) {
+        $multiple = 0;
+        $config['multiple_selection'] = false;
+        $config['multiple_selection_action_button'] = false;
+    }
+}
+
 if ($multiple) {
     $apply = 'apply_multiple';
 }
@@ -897,44 +905,44 @@ $get_params = http_build_query($get_params);
                         <div class="row-fluid">
                             <div class="span4 half">
                                 <?php if ($config['upload_files']) { ?>
-                                    <button class="tip btn upload-btn btn-success btn-large" title="<?php echo  __('Upload_file'); ?>"><i class="rficon-upload"></i><?php echo  __('Upload_file'); ?></button>
+                                    <button class="tip btn upload-btn" title="<?php echo  __('Upload_file'); ?>"><i class="rficon-upload"></i></button>
                                 <?php } ?>
                                 <?php if ($config['create_text_files']) { ?>
-                                    <button class="tip btn create-file-btn btn-large" title="<?php echo  __('New_File'); ?>"><i class="icon-plus"></i><i class="icon-file"></i></button>
+                                    <button class="tip btn create-file-btn" title="<?php echo  __('New_File'); ?>"><i class="icon-plus"></i><i class="icon-file"></i></button>
                                 <?php } ?>
                                 <?php if ($config['create_folders']) { ?>
-                                    <button class="tip btn new-folder btn-large" title="<?php echo  __('New_Folder') ?>"><i class="icon-plus"></i><i class="icon-folder-open"></i></button>
+                                    <button class="tip btn new-folder" title="<?php echo  __('New_Folder') ?>"><i class="icon-plus"></i><i class="icon-folder-open"></i></button>
                                 <?php } ?>
                                 <?php if ($config['copy_cut_files'] || $config['copy_cut_dirs']) { ?>
-                                    <button class="tip btn paste-here-btn btn-large" title="<?php echo __('Paste_Here'); ?>"><i class="rficon-clipboard-apply"></i></button>
-                                    <button class="tip btn clear-clipboard-btn btn-large" title="<?php echo __('Clear_Clipboard'); ?>"><i class="rficon-clipboard-clear"></i></button>
+                                    <button class="tip btn paste-here-btn" title="<?php echo __('Paste_Here'); ?>"><i class="rficon-clipboard-apply"></i></button>
+                                    <button class="tip btn clear-clipboard-btn" title="<?php echo __('Clear_Clipboard'); ?>"><i class="rficon-clipboard-clear"></i></button>
                                 <?php } ?>
                                 <div id="multiple-selection" style="display:none;">
                                     <?php if ($config['multiple_selection']) { ?>
                                         <?php if ($config['delete_files']) { ?>
-                                            <button class="tip btn multiple-delete-btn btn-large" title="<?php echo __('Erase'); ?>" data-confirm="<?php echo __('Confirm_del'); ?>"><i class="icon-trash"></i></button>
+                                            <button class="tip btn multiple-delete-btn" title="<?php echo __('Erase'); ?>" data-confirm="<?php echo __('Confirm_del'); ?>"><i class="icon-trash"></i></button>
                                         <?php } ?>
-                                        <button class="tip btn multiple-select-btn btn-large" title="<?php echo __('Select_All'); ?>"><i class="icon-check"></i></button>
-                                        <button class="tip btn multiple-deselect-btn btn-large" title="<?php echo __('Deselect_All'); ?>"><i class="icon-ban-circle"></i></button>
+                                        <button class="tip btn multiple-select-btn" title="<?php echo __('Select_All'); ?>"><i class="icon-check"></i></button>
+                                        <button class="tip btn multiple-deselect-btn" title="<?php echo __('Deselect_All'); ?>"><i class="icon-ban-circle"></i></button>
                                         <?php if ($apply_type != "apply_none" && $config['multiple_selection_action_button']) { ?>
-                                            <button class="btn multiple-action-btn btn-inverse btn-large" data-function="<?php echo $apply_type; ?>"><?php echo __('Select'); ?></button>
+                                            <button class="btn multiple-action-btn btn-inverse" data-function="<?php echo $apply_type; ?>"><?php echo __('Select'); ?></button>
                                         <?php } ?>
                                     <?php } ?>
                                 </div>
                             </div>
                             <div class="span2 half view-controller">
                                 <button class="btn tip<?php if ($view == 0) {
-                                                            echo " btn-inverse btn-large";
+                                                            echo " btn-inverse";
                                                         } ?>" id="view0" data-value="0" title="<?php echo __('View_boxes'); ?>"><i class="icon-th <?php if ($view == 0) {
                                                                                                                                                         echo "icon-white";
                                                                                                                                                     } ?>"></i></button>
                                 <button class="btn tip<?php if ($view == 1) {
-                                                            echo " btn-inverse btn-large";
+                                                            echo " btn-inverse";
                                                         } ?>" id="view1" data-value="1" title="<?php echo __('View_list'); ?>"><i class="icon-align-justify <?php if ($view == 1) {
                                                                                                                                                                 echo "icon-white";
                                                                                                                                                             } ?>"></i></button>
                                 <button class="btn tip<?php if ($view == 2) {
-                                                            echo " btn-inverse btn-large";
+                                                            echo " btn-inverse";
                                                         } ?>" id="view2" data-value="2" title="<?php echo __('View_columns_list'); ?>"><i class="icon-fire <?php if ($view == 2) {
                                                                                                                                                                 echo "icon-white";
                                                                                                                                                             } ?>"></i></button>
@@ -1127,7 +1135,7 @@ $get_params = http_build_query($get_params);
                                                                                                                 $file_prevent_rename = isset($filePermissions[$file]['prevent_rename']) && $filePermissions[$file]['prevent_rename'];
                                                                                                                 $file_prevent_delete = isset($filePermissions[$file]['prevent_delete']) && $filePermissions[$file]['prevent_delete'];
                                                                                                             }
-                                                                                                            ?><figure data-name="<?php echo $file ?>" data-path="<?php echo ($ftp ? route('FMfview.php') . '?ox=' . encrypt(['path' => $config['upload_dir'] . $rfm_subfolder . $subdir . $file, 'name' => $file]) : $rfm_subfolder . $subdir . $file); ?>" class="<?php if ($file == "..") {
+                                                                                                            ?><figure data-name="<?php echo $file ?>" data-path="<?php echo ($ftp ? route('filemanager.fview.php') . '?ox=' . encrypt(['path' => $config['upload_dir'] . $rfm_subfolder . $subdir . $file, 'name' => $file]) : $rfm_subfolder . $subdir . $file); ?>" class="<?php if ($file == "..") {
                                                                                                                                                                                                                                                                                                                                                                         echo "back-";
                                                                                                                                                                                                                                                                                                                                                                     } ?>directory" data-type="<?php if ($file != "..") {
                                                                                                                                                                                                                                                                                                                                                                                                     echo "dir";
@@ -1183,7 +1191,7 @@ $get_params = http_build_query($get_params);
                                             <i class="icon-pencil <?php if (!$config['rename_folders'] || $file_prevent_rename) {
                                                                         echo 'icon-white';
                                                                     } ?>"></i></a>
-                                        <a href="javascript:void('')" class="tip-left erase-button btn-danger btn-large <?php if ($config['delete_folders'] && !$file_prevent_delete) {
+                                        <a href="javascript:void('')" class="tip-left erase-button btn-danger <?php if ($config['delete_folders'] && !$file_prevent_delete) {
                                                                                                                             echo "delete-folder";
                                                                                                                         } ?>" title="<?php echo __('Erase') ?>" data-confirm="<?php echo __('Confirm_Folder_del'); ?>">
                                             <i class="icon-trash <?php if (!$config['delete_folders'] || $file_prevent_delete) {
@@ -1241,7 +1249,7 @@ $get_params = http_build_query($get_params);
                                     $file_path = $file_path1;
                                 }
                             } else {
-                                $file_path = route('FMfview.php') . '?ox=' . encrypt(['path' => $config['upload_dir'] . $rfm_subfolder . $subdir . $file, 'name' => $file]);
+                                $file_path = route('filemanager.fview.php') . '?ox=' . encrypt(['path' => $config['upload_dir'] . $rfm_subfolder . $subdir . $file, 'name' => $file]);
                             }
 
                             $is_img = false;
@@ -1262,7 +1270,7 @@ $get_params = http_build_query($get_params);
                                      * disabling for now
                                      * TODO: cache FTP thumbnails for preview
                                      */
-                                    $mini_src = $src_thumb = route('FMfview.php') . '?ox=' . encrypt(['path' => $config['ftp_thumbs_dir'] . $subdir . $file, 'name' => $file]);
+                                    $mini_src = $src_thumb = route('filemanager.fview.php') . '?ox=' . encrypt(['path' => $config['ftp_thumbs_dir'] . $subdir . $file, 'name' => $file]);
                                     $creation_thumb_path = "/" . $config['ftp_base_folder'] . $config['ftp_thumbs_dir'] . $subdir . $file;
                                 } else {
                                     $creation_thumb_path = $mini_src = $src_thumb = $thumbs_path . $file;
@@ -1338,7 +1346,7 @@ $get_params = http_build_query($get_params);
                                                                                                                                                         $file_prevent_delete = isset($filePermissions[$file]['prevent_delete']) && $filePermissions[$file]['prevent_delete'];
                                                                                                                                                     }
                                                                                                                                                     ?>
-                                    <figure data-name="<?php echo $file ?>" data-path="<?php echo ($ftp ? route('FMfview.php') . '?ox=' . encrypt(['path' => $config['upload_dir'] . $rfm_subfolder . $subdir . $file, 'name' => $file]) : $rfm_subfolder . $subdir . $file); ?>" data-type="<?php if ($is_img) {
+                                    <figure data-name="<?php echo $file ?>" data-path="<?php echo ($ftp ? route('filemanager.fview.php') . '?ox=' . encrypt(['path' => $config['upload_dir'] . $rfm_subfolder . $subdir . $file, 'name' => $file]) : $rfm_subfolder . $subdir . $file); ?>" data-type="<?php if ($is_img) {
                                                                                                                                                                                                                                                                                                     echo "img";
                                                                                                                                                                                                                                                                                                 } else {
                                                                                                                                                                                                                                                                                                     echo "file";

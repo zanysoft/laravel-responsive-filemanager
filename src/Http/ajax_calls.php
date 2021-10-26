@@ -280,7 +280,7 @@ if (isset($_GET['action'])) {
                     exit;
                 }
                 $info = pathinfo($preview_file);
-                $preview_file = route('FMfview.php').'?ox='.encrypt(
+                $preview_file = route('filemanager.fview.php').'?ox='.encrypt(
                     ['path' => $config['upload_dir'] . $_GET['file'], 'name' => $_GET['file']]
                 );
             } else {
