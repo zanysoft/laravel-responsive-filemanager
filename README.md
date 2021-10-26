@@ -15,27 +15,19 @@ This software includes a modified version of [Responsive File Manager](https://g
 **If you wan't to use it for comercial purpose take a look on [the author (Alberto Peripolli
 ) website](https://responsivefilemanager.com/#download-section)**
 
-*This repo is under MIT Licence except parts where antoher licence is mentioned in file.*
-
-### Corrections are made to RFM in order to
-
-- Prevent collisions
-- Fix small errors
-- Adapt to Laravel
+This repo is under MIT Licence except parts where antoher licence is mentioned in file.
 
 The Laravel plugin code part here is under **MIT Licence**.
 
 *The RFM author delivers a commercial version of his code (a modified ```include.js```). You will need to modify this file if you use CSRF check on your laravel app by adding ```_token: jQuery('meta[name="csrf-token"]').attr('content')``` on ajax calls. You can use [www.diffchecker.com](https://www.diffchecker.com) to check modifications you will have to apply to your ```include.commercial.js``` file. I can't deliver myself a licence to use RFM for commercial purpose*
 
-__**If you have some corrections, recommendations or anything else to say please let me know. Don't hesitate to make PR if you done something cool you wan't to share**__
+__**If you have some corrections, recommendations or anything else to say please let me know.**__
 
 **__[Read Responsive File Manager Documentation](https://responsivefilemanager.com/index.php#documentation-section)__**
 
 ___
 
 ## **How to Install ?**
-
-## **#1**
 
 ### *Install in your project*
 
@@ -78,23 +70,33 @@ Generate private key for url identification
 All configs included to work out of the box.
 Files are meant to be stored in public folder.
 
-**Don't forget to create upload dir**
+**Don't forget to set upload dir in config file**
 
-    mkdir -p public/uploads/files/
+    'upload_dir' => '/media/',
+    
+**Set route prefix in config file**
 
+    'route_prefix' => 'filemanager/',
+    //or
+    'route_prefix' => 'admin/filemanager/',  
+      
+**Set middleware in config file for security purpose**
+
+    'middleware' => 'auth', //defaualt is web
+    
 ___
-
-## **#2**
 
 ### Use as StandAlone
 
 *Use helpers to write filemanager url*
 
-    <a href="@filemanager_get_resource(dialog.php)?field_id=imgField&lang=en_EN&akey=@filemanager_get_key()" value="Files">Open RFM</a>
+    <a href="@filemanager_get_resource(dialog.php)?field_id=imgField&lang=en_EN&akey=@filemanager_get_key()">Open RFM</a>
+    // OR
+    <a href="@filemanager_dialog(['field_id'=>'imgField'])">Open RFM</a>    
+    // OR
+    <a href="@filemanager_dialog()">Open RFM</a>
 
 see ```USE AS STAND-ALONE FILE MANAGER``` in Responsible [File Manager Doc](https://responsivefilemanager.com/index.php#documentation-section)
-
-*tip: Seems to support Bootstrap Modal*
 
 ___
 
@@ -147,79 +149,4 @@ with tinymce parameters
         });
     });
 
-#### To make private folder use .htaccess with ```Deny from all```
-
-___
-
-### Configuration
-
-#### Language
-
-*This package has multiple languages support, it is still incomplete. please contribute if you have the language concerned skills.*
-
-1. Url get parameter ($_GET)
-2. ```RF.language``` session var (*User selected languages in drop list*)
-3. config.php (*rfm.php*) ```default_language```
-4. User prefered language (*HTTP headers*)
-5. Your Laravel app default language
-
-<details>
-<summary><b>Available Languages</b></summary>
-
-    az_AZ      Azərbaycan dili
-    bg_BG      български език
-    ca         Català, valencià
-    cs         čeština, český jazyk
-    da         Dansk
-    de         Deutsch
-    el_GR      ελληνικά
-    en_EN      English
-    es         Español
-    fa         فارسی
-    fi_FI      Finnish
-    fr_FR      Français
-    he_IL      Hebrew (Israel)
-    hr         Hrvatski jezik
-    hu_HU      Magyar
-    id         Bahasa Indonesia
-    it         Italiano
-    ja         日本
-    lt         Lietuvių kalba
-    mn_MN      монгол
-    nb_NO      Norsk bokmål
-    nn_NO      Norsk nynorsk
-    nl         Nederlands, Vlaams
-    pl         Język polski, polszczyzna
-    pt_BR      Português(Brazil,
-    pt_PT      Português
-    ro         Română
-    ru         Pусский язык
-    sk         Slovenčina
-    sl         Slovenski jezik
-    sv_SE      Svenska
-    th_TH      ไทย
-    tr_TR      Türkçe
-    uk_UA      Yкраїнська мова
-    vi         Tiếng Việt
-    zh_CN      中文 (Zhōngwén), 汉语, 漢語
-</details>
-
-#### FTP
-
-To come
-___
-
-**TODO :**
-
-- [x] private key setup
-- [x] more corrections on JS side
-- [x] more corrections on languages
-- [x] Test with tinyMCE
-- [x] Include commercial support
-- [x] Test and debug FTP fonctionnality (Alpha Still need debug some functionallities)
-- [x] TODO: cache FTP thumbnails for preview (images only)
-- [ ] MultiUser and Auth Support
-- [ ] compile assets
-- [ ] publish package
-- [ ] Rewrite routes to be cleaner (eg :  ajax_calls/{action}/{subaction})
-- [ ] separe properly View from logic ( ex: dialog.php  OMG <(o_O)>)
+**To make private folder use .htaccess with ```Deny from all```**
