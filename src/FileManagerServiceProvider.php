@@ -162,8 +162,16 @@ class FileManagerServiceProvider extends ServiceProvider
          * Blade print
          */
 
-        Blade::directive('external_filemanager_path', function () use ($FMPUBPATH) {
-            return $FMPUBPATH . '/';
+        Blade::directive('filemanager_assets', function ($file) use ($FMPUBPATH) {
+            return url($FMPUBPATH . '/' . trim($file, '/'));
+        });
+
+        Blade::directive('external_filemanager_path', function ($file) use ($FMPUBPATH) {
+            $route_prefix = rtrim(config('rfm.route_prefix', 'filemanager/'), '/ ');
+            
+            $file = trim($file, '/ ');
+
+            return rtrim(url($route_prefix . ($file ? '/' . $file : '')), '/') . '/';
         });
 
         Blade::directive('filemanager_get_key', function () {
@@ -201,6 +209,10 @@ class FileManagerServiceProvider extends ServiceProvider
                     $query_data['akey'] = filemanager_get_key();
                 }
 
+                if (!isset($query_data['type'])) {
+                    $query_data['type'] = 0;
+                }
+
                 if (!isset($query_data['lang'])) {
                     $query_data['lang'] = $config['default_language'] ?? '';
                 }
@@ -222,7 +234,7 @@ class FileManagerServiceProvider extends ServiceProvider
         if (file_exists($path)) {
             return false;
         }
-        
+
         $oldumask = umask(0);
         $permission = 0755;
         $output = false;

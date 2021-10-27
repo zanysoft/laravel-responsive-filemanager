@@ -1,34 +1,35 @@
 {
-    "name": "zanysoft/laravel-responsive-filemanager",
-    "description": "Integrate Alberto Peripolli's Responsive File Manager with Laravel",
-    "keywords": [
-        "laravel",
-        "responsive",
-        "filemanager"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Mubashar Ahmad",
-            "email": "info@zanysoft.net"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "php": ">=7.1",
-        "illuminate/support": "^7.0|^8.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "ZanySoft\\ResponsiveFileManager\\": "src/",
-            "ZanySoft\\FtpClient\\": "src/FtpClient/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "ZanySoft\\ResponsiveFileManager\\FileManagerServiceProvider"
-            ]
-        }
+  "name": "zanysoft/laravel-responsive-filemanager",
+  "description": "Integrate Alberto Peripolli's Responsive File Manager with Laravel",
+  "keywords": [
+    "laravel",
+    "responsive",
+    "filemanager"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mubashar Ahmad",
+      "email": "info@zanysoft.net"
     }
+  ],
+  "version": "0.1.0",
+  "require": {
+    "php": ">=7.1",
+    "illuminate/support": "^7.0|^8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ZanySoft\\ResponsiveFileManager\\": "src/",
+      "ZanySoft\\FtpClient\\": "src/FtpClient/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "ZanySoft\\ResponsiveFileManager\\FileManagerServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "stable"
 }

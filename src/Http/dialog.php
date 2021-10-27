@@ -12,13 +12,6 @@ session()->put('RF.verify', "RESPONSIVEfilemanager");
 $config = config('rfm');
 $version = config('rfm.version');
 
-if (!session()->get('RF.composerVersion')) {
-    $composerVersion = json_decode(file_get_contents(__DIR__ . '/../../composer.json'))->version;
-    session()->put('RF.composerVersion', $composerVersion);
-} else {
-    $composerVersion = session()->get('RF.composerVersion');
-}
-
 $time = time();
 
 $vendor_path = parse_url(asset('vendor/responsivefilemanager') . '/')['path'];
@@ -208,7 +201,7 @@ if (!session()->has('RF.view_type')) {
 }
 
 if (isset($_GET['view'])) {
-    $view = fixGetParams($_GET['view']);
+    $view = RFM::fixGetParams($_GET['view']);
     session()->put('RF.view_type', $view);
 }
 
@@ -360,8 +353,9 @@ $get_params = http_build_query($get_params);
         </style>
         <![endif]-->
 
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="<?php echo $vendor_path; ?>js/vendor/jquery.min.js"></script>
+    <script src="<?php echo $vendor_path; ?>js/vendor/jquery-ui.min.js"></script>
+    <!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>-->
     <script src="<?php echo $vendor_path; ?>js/plugins.js?v=<?php echo $version; ?>"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jplayer/2.9.2/jplayer/jquery.jplayer.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.6.7/fabric.js"></script>
@@ -390,8 +384,18 @@ $get_params = http_build_query($get_params);
     <script src="<?php echo $vendor_path; ?>js/include.js?v=<?php echo $version; ?>"></script>
 
     <?php if ($config['load_more']) : ?>
-        <script src="js/load_more.js?v=<?php echo $version; ?>"></script>
+        <script src="<?php echo $vendor_path; ?>js/load_more.js?v=<?php echo $version; ?>"></script>
     <?php endif; ?>
+    <script>
+        $(function () {
+            "use strict";
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': "<?php echo csrf_token(); ?>"
+                }
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -421,8 +425,6 @@ $get_params = http_build_query($get_params);
     <script src="<?php echo $vendor_path; ?>js/jquery.fileupload-validate.js"></script>
     <!-- The File Upload user interface plugin -->
     <script src="<?php echo $vendor_path; ?>js/jquery.fileupload-ui.js"></script>
-    <!-- Loadmore feature -->
-    <script src="<?php echo $vendor_path; ?>js/load_more.js"></script>
 
     <input type="hidden" id="ftp" value="<?php echo !!$ftp; ?>" />
     <input type="hidden" id="popup" value="<?php echo $popup; ?>" />
@@ -606,11 +608,7 @@ $get_params = http_build_query($get_params);
                                 <!-- The template to display files available for download -->
                                 <script id="template-download" type="text/x-tmpl">
                                     {% for (var i=0, file; file=o.files[i]; i++) { %}
-                            {% if (file.error) { %}
-                            <tr class="template-download error">
-                            {% } else { %}
-                            <tr class="template-download success">
-                            {% } %}
+                        <tr class="template-download">
                             <td>
                                 <span class="preview">
                                     {% if (file.error) { %}
@@ -629,7 +627,7 @@ $get_params = http_build_query($get_params);
                                     {% } %}
                                 </p>
                                 {% if (file.error) { %}
-                                <div><span class="text-error">Error</span> {%=file.error%}</div>
+                                    <div><span class="label label-danger">Error</span> {%=file.error%}</div>
                                 {% } %}
                             </td>
                             <td>
@@ -900,7 +898,8 @@ $get_params = http_build_query($get_params);
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <div class="brand"></div>
+                    <div class="brand"><?php echo __('Toolbar');?></div>
+                    <div class="nav-collapse collapse">
                     <div class="filters">
                         <div class="row-fluid">
                             <div class="span4 half">
@@ -931,23 +930,10 @@ $get_params = http_build_query($get_params);
                                 </div>
                             </div>
                             <div class="span2 half view-controller">
-                                <button class="btn tip<?php if ($view == 0) {
-                                                            echo " btn-inverse";
-                                                        } ?>" id="view0" data-value="0" title="<?php echo __('View_boxes'); ?>"><i class="icon-th <?php if ($view == 0) {
-                                                                                                                                                        echo "icon-white";
-                                                                                                                                                    } ?>"></i></button>
-                                <button class="btn tip<?php if ($view == 1) {
-                                                            echo " btn-inverse";
-                                                        } ?>" id="view1" data-value="1" title="<?php echo __('View_list'); ?>"><i class="icon-align-justify <?php if ($view == 1) {
-                                                                                                                                                                echo "icon-white";
-                                                                                                                                                            } ?>"></i></button>
-                                <button class="btn tip<?php if ($view == 2) {
-                                                            echo " btn-inverse";
-                                                        } ?>" id="view2" data-value="2" title="<?php echo __('View_columns_list'); ?>"><i class="icon-fire <?php if ($view == 2) {
-                                                                                                                                                                echo "icon-white";
-                                                                                                                                                            } ?>"></i></button>
+                                <button class="btn tip<?php if($view==0) echo " btn-inverse";?>" id="view0" data-value="0" title="<?php echo __('View_boxes');?>"><i class="icon-th <?php if($view==0) echo "icon-white";?>"></i></button>
+                                <button class="btn tip<?php if($view==1) echo " btn-inverse";?>" id="view1" data-value="1" title="<?php echo __('View_list');?>"><i class="icon-align-justify <?php if($view==1) echo "icon-white";?>"></i></button>
+                                <button class="btn tip<?php if($view==2) echo " btn-inverse";?>" id="view2" data-value="2" title="<?php echo __('View_columns_list');?>"><i class="icon-fire <?php if($view==2) echo "icon-white";?>"></i></button>
                             </div>
-                            <div class="nav-collapse collapse">
                                 <div class="span6 entire types">
                                     <span><?php echo __('Filters'); ?>:</span>
                                     <?php if ($_GET['type'] != 1 && $_GET['type'] != 3 && $config['show_filter_buttons']) { ?>
@@ -1029,19 +1015,11 @@ $get_params = http_build_query($get_params);
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu pull-left sorting">
-                            <li class="text-center"><strong><?php echo __('Sorting') ?></strong></li>
-                            <li><a class="sorter sort-name <?php if ($sort_by == "name") {
-                                                                echo ($descending) ? "descending" : "ascending";
-                                                            } ?>" href="javascript:void('')" data-sort="name"><?php echo __('Filename'); ?></a></li>
-                            <li><a class="sorter sort-date <?php if ($sort_by == "date") {
-                                                                echo ($descending) ? "descending" : "ascending";
-                                                            } ?>" href="javascript:void('')" data-sort="date"><?php echo __('Date'); ?></a></li>
-                            <li><a class="sorter sort-size <?php if ($sort_by == "size") {
-                                                                echo ($descending) ? "descending" : "ascending";
-                                                            } ?>" href="javascript:void('')" data-sort="size"><?php echo __('Size'); ?></a></li>
-                            <li><a class="sorter sort-extension <?php if ($sort_by == "extension") {
-                                                                    echo ($descending) ? "descending" : "ascending";
-                                                                } ?>" href="javascript:void('')" data-sort="extension"><?php echo __('Type'); ?></a></li>
+                            <li class="text-center"><strong><?php echo trans('Sorting') ?></strong></li>
+                            <li><a class="sorter sort-name <?php if($sort_by=="name"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="name"><?php echo __('Filename');?></a></li>
+                            <li><a class="sorter sort-date <?php if($sort_by=="date"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="date"><?php echo __('Date');?></a></li>
+                            <li><a class="sorter sort-size <?php if($sort_by=="size"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="size"><?php echo __('Size');?></a></li>
+                            <li><a class="sorter sort-extension <?php if($sort_by=="extension"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="extension"><?php echo __('Type');?></a></li>
                         </ul>
                     </div>
                 </li>
@@ -1066,20 +1044,12 @@ $get_params = http_build_query($get_params);
                     <?php if ($config['show_sorting_bar']) { ?>
                         <!-- sorter -->
                         <div class="sorter-container <?php echo "list-view" . $view; ?>">
-                            <div class="file-name"><a class="sorter sort-name <?php if ($sort_by == "name") {
-                                                                                    echo ($descending) ? "descending" : "ascending";
-                                                                                } ?>" href="javascript:void('')" data-sort="name"><?php echo __('Filename'); ?></a></div>
-                            <div class="file-date"><a class="sorter sort-date <?php if ($sort_by == "date") {
-                                                                                    echo ($descending) ? "descending" : "ascending";
-                                                                                } ?>" href="javascript:void('')" data-sort="date"><?php echo __('Date'); ?></a></div>
-                            <div class="file-size"><a class="sorter sort-size <?php if ($sort_by == "size") {
-                                                                                    echo ($descending) ? "descending" : "ascending";
-                                                                                } ?>" href="javascript:void('')" data-sort="size"><?php echo __('Size'); ?></a></div>
-                            <div class='img-dimension'><?php echo __('Dimension'); ?></div>
-                            <div class='file-extension'><a class="sorter sort-extension <?php if ($sort_by == "extension") {
-                                                                                            echo ($descending) ? "descending" : "ascending";
-                                                                                        } ?>" href="javascript:void('')" data-sort="extension"><?php echo __('Type'); ?></a></div>
-                            <div class='file-operations'><?php echo __('Operations'); ?></div>
+                            <div class="file-name"><a class="sorter sort-name <?php if($sort_by=="name"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="name"><?php echo __('Filename');?></a></div>
+                            <div class="file-date"><a class="sorter sort-date <?php if($sort_by=="date"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="date"><?php echo __('Date');?></a></div>
+                            <div class="file-size"><a class="sorter sort-size <?php if($sort_by=="size"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="size"><?php echo __('Size');?></a></div>
+                            <div class='img-dimension'><?php echo __('Dimension');?></div>
+                            <div class='file-extension'><a class="sorter sort-extension <?php if($sort_by=="extension"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="extension"><?php echo __('Type');?></a></div>
+                            <div class='file-operations'><?php echo __('Operations');?></div>
                         </div>
                     <?php } ?>
 
@@ -1120,26 +1090,15 @@ $get_params = http_build_query($get_params);
                             }
 
                         ?>
-                            <li data-name="<?php echo $file ?>" class="<?php if ($file == '..') {
-                                                                            echo 'back';
-                                                                        } else {
-                                                                            echo 'dir';
-                                                                        } ?> <?php if (!$config['multiple_selection']) {
-                                                                                ?>no-selector<?php
-                                                                                            } ?>" <?php if (($filter != '' && stripos($file, $filter) === false)) {
-                                                                                                        echo ' style="display:none;"';
-                                                                                                    } ?>><?php
-                                                                                                            $file_prevent_rename = false;
-                                                                                                            $file_prevent_delete = false;
-                                                                                                            if (isset($filePermissions[$file])) {
-                                                                                                                $file_prevent_rename = isset($filePermissions[$file]['prevent_rename']) && $filePermissions[$file]['prevent_rename'];
-                                                                                                                $file_prevent_delete = isset($filePermissions[$file]['prevent_delete']) && $filePermissions[$file]['prevent_delete'];
-                                                                                                            }
-                                                                                                            ?><figure data-name="<?php echo $file ?>" data-path="<?php echo ($ftp ? route('filemanager.fview.php') . '?ox=' . encrypt(['path' => $config['upload_dir'] . $rfm_subfolder . $subdir . $file, 'name' => $file]) : $rfm_subfolder . $subdir . $file); ?>" class="<?php if ($file == "..") {
-                                                                                                                                                                                                                                                                                                                                                                        echo "back-";
-                                                                                                                                                                                                                                                                                                                                                                    } ?>directory" data-type="<?php if ($file != "..") {
-                                                                                                                                                                                                                                                                                                                                                                                                    echo "dir";
-                                                                                                                                                                                                                                                                                                                                                                                                } ?>">
+                            <li data-name="<?php echo $file ?>" class="<?php echo $file == '..'? 'back' : 'dir'; ?> <?php echo !$config['multiple_selection']? 'no-selector':''; ?>" <?php if (($filter != '' && stripos($file, $filter) === false)) { echo ' style="display:none;"'; } ?>>
+                                <?php
+                                        $file_prevent_rename = false;
+                                        $file_prevent_delete = false;
+                                        if (isset($filePermissions[$file])) {
+                                            $file_prevent_rename = isset($filePermissions[$file]['prevent_rename']) && $filePermissions[$file]['prevent_rename'];
+                                            $file_prevent_delete = isset($filePermissions[$file]['prevent_delete']) && $filePermissions[$file]['prevent_delete'];
+                                        }
+                                    ?><figure data-name="<?php echo $file ?>" data-path="<?php echo ($ftp ? route('filemanager.fview.php') . '?ox=' . encrypt(['path' => $config['upload_dir'] . $rfm_subfolder . $subdir . $file, 'name' => $file]) : $rfm_subfolder . $subdir . $file); ?>" class="<?php if ($file == "..") { echo "back-"; } ?>directory" data-type="<?php if ($file != "..") { echo "dir"; } ?>">
                                     <?php if ($file == "..") { ?>
                                         <input type="hidden" class="path" value="<?php echo str_replace('.', '', dirname($rfm_subfolder . $subdir)); ?>" />
                                         <input type="hidden" class="path_thumb" value="<?php echo dirname($thumbs_path) . "/"; ?>" />
@@ -1147,17 +1106,13 @@ $get_params = http_build_query($get_params);
                                     <a class="folder-link" href="dialog.php?<?php echo $get_params . rawurlencode($src) . "&" . ($callback ? 'callback=' . $callback . "&" : '') . uniqid() ?>">
                                         <div class="img-precontainer">
                                             <div class="img-container directory"><span></span>
-                                                <img class="directory-img" data-src="<?php echo $vendor_path; ?>img/<?php echo $config['icon_theme']; ?>/folder<?php if ($file == "..") {
-                                                                                                                                                                    echo "_back";
-                                                                                                                                                                } ?>.png" />
+                                                <img class="directory-img" data-src="<?php echo $vendor_path; ?>img/<?php echo $config['icon_theme']; ?>/folder<?php if ($file == "..") { echo "_back"; } ?>.png" />
                                             </div>
                                         </div>
                                         <div class="img-precontainer-mini directory">
                                             <div class="img-container-mini">
                                                 <span></span>
-                                                <img class="directory-img" data-src="<?php echo $vendor_path; ?>img/<?php echo $config['icon_theme']; ?>/folder<?php if ($file == "..") {
-                                                                                                                                                                    echo "_back";
-                                                                                                                                                                } ?>.png" />
+                                                <img class="directory-img" data-src="<?php echo $vendor_path; ?>img/<?php echo $config['icon_theme']; ?>/folder<?php if ($file == "..") { echo "_back"; } ?>.png" />
                                             </div>
                                         </div>
                                         <?php if ($file == "..") { ?>
@@ -1185,18 +1140,10 @@ $get_params = http_build_query($get_params);
                                     <?php } ?>
                                     <div class='file-extension'><?php echo RFM::fixStrtolower(__('Type_dir')); ?></div>
                                     <figcaption>
-                                        <a href="javascript:void('')" class="tip-left edit-button rename-file-paths <?php if ($config['rename_folders'] && !$file_prevent_rename) {
-                                                                                                                        echo "rename-folder";
-                                                                                                                    } ?>" title="<?php echo __('Rename') ?>" data-folder="1" data-permissions="<?php echo $file_array['permissions']; ?>">
-                                            <i class="icon-pencil <?php if (!$config['rename_folders'] || $file_prevent_rename) {
-                                                                        echo 'icon-white';
-                                                                    } ?>"></i></a>
-                                        <a href="javascript:void('')" class="tip-left erase-button btn-danger <?php if ($config['delete_folders'] && !$file_prevent_delete) {
-                                                                                                                            echo "delete-folder";
-                                                                                                                        } ?>" title="<?php echo __('Erase') ?>" data-confirm="<?php echo __('Confirm_Folder_del'); ?>">
-                                            <i class="icon-trash <?php if (!$config['delete_folders'] || $file_prevent_delete) {
-                                                                        echo 'icon-white';
-                                                                    } ?>"></i>
+                                        <a href="javascript:void('')" class="tip-left edit-button rename-file-paths <?php if($config['rename_folders'] && !$file_prevent_rename) echo "rename-folder";?>" title="<?php echo __('Rename')?>" data-folder="1" data-permissions="<?php echo $file_array['permissions']; ?>">
+                                        <i class="icon-pencil <?php if(!$config['rename_folders'] || $file_prevent_rename) echo 'icon-white';?>"></i></a>
+                                        <a href="javascript:void('')" class="tip-left erase-button <?php if($config['delete_folders'] && !$file_prevent_delete) echo "delete-folder";?>" title="<?php echo __('Erase')?>" data-confirm="<?php echo __('Confirm_Folder_del');?>" >
+                                        <i class="icon-trash <?php if(!$config['delete_folders'] || $file_prevent_delete) echo 'icon-white';?>"></i>
                                         </a>
                                     </figcaption>
                                 <?php } ?>
@@ -1587,7 +1534,7 @@ $get_params = http_build_query($get_params);
                             url: newURL,
                             path: $('#sub_folder').val() + $('#fldr_value').val(),
                             name: $('#tui-image-editor').attr('data-name'),
-                            _token: jQuery('meta[name="csrf-token"]').attr('content')
+                            _token: $('meta[name="csrf-token"]').attr('content')
                         }
                     }).done(function(msg) {
                         exitTUI();
@@ -1614,11 +1561,9 @@ $get_params = http_build_query($get_params);
             });
         }
     </script>
-    <div id="version" style="display: none;"><?php echo $composerVersion; ?></div>
 </body>
 
 </html>
-
 <?php
 session()->save();
 ?>

@@ -80,7 +80,7 @@ mix.scripts(
 );
 
 mix.scripts(
-    'src/assets/js/plugin_responsivefilemanager_plugin.js',
+    'src/assets/js/responsivefilemanager_plugin.js',
     'resources/tinymce/plugins/responsivefilemanager/plugin.min.js'
 );
 

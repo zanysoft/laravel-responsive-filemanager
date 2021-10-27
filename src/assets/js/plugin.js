@@ -7,20 +7,23 @@
  * Contributing: https://github.com/trippo/ResponsiveFilemanager
  */
 
-tinymce.PluginManager.add('filemanager', function (editor, url) {
+tinymce.PluginManager.add('filemanager', function (editor) {
+
+    if (typeof editor.settings.filemanager_config == "undefined") {
+        editor.settings.filemanager_config = {}
+    }
 
     editor.settings.file_picker_types = 'file image media';
     editor.settings.file_picker_callback = filemanager;
 
-    editor.ui.registry.addButton('responsivefilemanager', {
+    /*editor.ui.registry.addButton('responsivefilemanager', {
         icon: 'browse',
         onAction: function () {
             filemanager((e,s) => { console.log(e,s); return false; }, null, 'file');
         }
-      });
+      });*/
 
-    function filemanager_onMessage(event)
-    {
+    function filemanager_onMessage(event) {
         if (editor.settings.external_filemanager_path.toLowerCase().indexOf(event.origin.toLowerCase()) === 0) {
             if (event.data.sender === 'responsivefilemanager') {
                 tinymce.activeEditor.windowManager.getParams().setUrl(event.data.url);
@@ -36,51 +39,89 @@ tinymce.PluginManager.add('filemanager', function (editor, url) {
         }
     }
 
-    function filemanager(callback, value, meta)
-    {
-        var width = window.innerWidth-30;
-        var height = window.innerHeight-60;
+    function filemanager(callback, value, meta) {
+        var width = window.innerWidth - 30;
+        var height = window.innerHeight - 60;
         if (width > 1800) {
-            width=1800;
+            width = 1800;
         }
         if (height > 1200) {
-            height=1200;
+            height = 1200;
         }
-        if (width>600) {
+        if (width > 600) {
             var width_reduce = (width - 20) % 138;
             width = width - width_reduce + 10;
         }
 
         // DEFAULT AS FILE
-        urltype=2;
+        urltype = 2;
         if (meta.filetype === 'image' || meta.mediaType === 'image') {
-            urltype=1; }
+            urltype = 1;
+        }
         if (meta.filetype === 'media' || meta.mediaType === 'media') {
-            urltype=3; }
+            urltype = 3;
+        }
 
-        var title="RESPONSIVE FileManager";
+        var title = "RESPONSIVE FileManager";
         if (typeof editor.settings.filemanager_title !== "undefined" && editor.settings.filemanager_title) {
-            title=editor.settings.filemanager_title;
+            title = editor.settings.filemanager_title;
+        } else if (typeof editor.settings.filemanager_config.title !== "undefined" && editor.settings.filemanager_config.title) {
+            title = editor.settings.filemanager_config.title;
         }
-        var akey="key";
+        var akey = "key";
         if (typeof editor.settings.filemanager_access_key !== "undefined" && editor.settings.filemanager_access_key) {
-            akey=editor.settings.filemanager_access_key;
+            akey = editor.settings.filemanager_access_key;
+        } else if (typeof editor.settings.filemanager_config.access_key !== "undefined" && editor.settings.filemanager_config.access_key) {
+            akey = editor.settings.filemanager_config.access_key;
         }
-        var sort_by="";
+        var sort_by = "";
         if (typeof editor.settings.filemanager_sort_by !== "undefined" && editor.settings.filemanager_sort_by) {
-            sort_by="&sort_by="+editor.settings.filemanager_sort_by;
+            sort_by = "&sort_by=" + editor.settings.filemanager_sort_by;
+        } else if (typeof editor.settings.filemanager_config.sort_by !== "undefined" && editor.settings.filemanager_config.sort_by) {
+            sort_by = "&sort_by=" + editor.settings.filemanager_config.sort_by;
         }
-        var descending=0;
+        var descending = 0;
         if (typeof editor.settings.filemanager_descending !== "undefined" && editor.settings.filemanager_descending) {
-            descending=editor.settings.filemanager_descending;
+            descending = editor.settings.filemanager_descending;
+        } else if (typeof editor.settings.filemanager_config.descending !== "undefined" && editor.settings.filemanager_config.descending) {
+            descending = editor.settings.filemanager_config.descending;
         }
-        var fldr="";
+        var fldr = "";
         if (typeof editor.settings.filemanager_subfolder !== "undefined" && editor.settings.filemanager_subfolder) {
-            fldr="&fldr="+editor.settings.filemanager_subfolder;
+            fldr = "&fldr=" + editor.settings.filemanager_subfolder;
+        } else if (typeof editor.settings.filemanager_config.subfolder !== "undefined" && editor.settings.filemanager_config.subfolder) {
+            fldr = "&fldr=" + editor.settings.filemanager_config.subfolder;
         }
-        var crossdomain="";
-        if (typeof editor.settings.filemanager_crossdomain !== "undefined" && editor.settings.filemanager_crossdomain) {
-            crossdomain="&crossdomain=1";
+
+        var relative_url = "";
+        if (typeof editor.settings.filemanager_relative_url !== "undefined" && editor.settings.filemanager_relative_url) {
+            relative_url = "&relative_url=" + editor.settings.filemanager_relative_url;
+        } else if (typeof editor.settings.filemanager_config.relative_url !== "undefined" && editor.settings.filemanager_config.relative_url) {
+            relative_url = "&relative_url=" + editor.settings.filemanager_config.relative_url;
+        }
+
+        var upload_dir = "";
+        if (typeof editor.settings.filemanager_config.upload_dir !== "undefined") {
+            upload_dir = "&upload_dir=" + encodeURIComponent(editor.settings.filemanager_config.upload_dir);
+        }
+
+        var can_delete = "";
+        if (typeof editor.settings.filemanager_config.can_delete !== "undefined") {
+            can_delete = "&can_delete=" + editor.settings.filemanager_config.can_delete;
+        }
+
+        var can_rename = "";
+        if (typeof editor.settings.filemanager_config.can_rename !== "undefined") {
+            can_rename = "&can_rename=" + editor.settings.filemanager_config.can_rename;
+        }
+        var crossdomain = "";
+        if (typeof editor.settings.filemanager_crossdomain !== "undefined") {
+            crossdomain = editor.settings.filemanager_crossdomain
+        } else if (typeof editor.settings.filemanager_config.crossdomain !== "undefined") {
+            crossdomain = editor.settings.filemanager_config.crossdomain
+        }
+        if (crossdomain) {
+            crossdomain = "&crossdomain=1";
 
             // Add handler for a message from ResponsiveFilemanager
             if (window.addEventListener) {
@@ -90,15 +131,14 @@ tinymce.PluginManager.add('filemanager', function (editor, url) {
             }
         }
 
-        window.addEventListener('message', function receiveMessage(event)
-        {
+        window.addEventListener('message', function receiveMessage(event) {
             window.removeEventListener('message', receiveMessage, false);
             if (event.data.sender === 'responsivefilemanager') {
                 callback(event.data.url);
             }
         }, false);
 
-        var dialogUrl = editor.settings.external_filemanager_path+'?type='+urltype+'&descending='+descending+sort_by+fldr+crossdomain+'&lang='+editor.settings.language+'&akey='+akey;
+        var dialogUrl = editor.settings.external_filemanager_path + 'dialog.php?type=' + urltype + '&descending=' + descending + sort_by + fldr + crossdomain + '&lang=' + editor.settings.language + '&akey=' + akey + relative_url + upload_dir + can_delete + can_rename;
 
         if (tinymce.majorVersion > 4) {
             tinymce.activeEditor.windowManager.openUrl({
