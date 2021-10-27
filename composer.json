@@ -13,7 +13,6 @@
       "email": "info@zanysoft.net"
     }
   ],
-  "version": "0.1.0",
   "require": {
     "php": ">=7.1",
     "illuminate/support": "^7.0|^8.0"
