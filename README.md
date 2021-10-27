@@ -1,6 +1,6 @@
-# Laravel-ResponsiveFileManager
+# Laravel-Responsive-FileManager
 
-[![GitHub issues](https://img.shields.io/github/issues/ZanySoft/laravel-responsive-filemanager)](https://github.com/zanysoft/laravel-responsive-filemanager/issues)
+[![Downloads](https://img.shields.io/packagist/dt/zanysoft/laravel-responsive-filemanager.svg?style=flat-square)](https://packagist.org/packages/zanysoft/laravel-responsive-filemanager)
 [![GitHub license](https://img.shields.io/badge/License-MIT-informational.svg)](https://github.com/zanysoft/laravel-responsive-filemanager/blob/master/LICENSE)
 [![GitHub license](https://img.shields.io/badge/Licence-CC%20BY%20NC%203.0-informational.svg)](https://creativecommons.org/licenses/by-nc/3.0/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-informational.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
