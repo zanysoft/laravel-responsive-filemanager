@@ -155,6 +155,7 @@ class FileManagerServiceProvider extends ServiceProvider
         $FM_PUBLISH[__DIR__ . $FMPRIVPATH . '/img'] = public_path($FMPUBPATH . '/img');//phpcs:ignore
         $FM_PUBLISH[__DIR__ . $FMPRIVPATH . '/js'] = public_path($FMPUBPATH . '/js');//phpcs:ignore
         $FM_PUBLISH[__DIR__ . $FMPRIVPATH . '/svg'] = public_path($FMPUBPATH . '/svg');//phpcs:ignore
+        $FM_PUBLISH[__DIR__ . $FMPRIVPATH . '/tinymce'] = public_path($FMPUBPATH . '/tinymce');//phpcs:ignore
         $FM_PUBLISH[__DIR__ . '/I18N'] = resource_path('lang/vendor/rfm');
         $this->publishes($FM_PUBLISH);
 
