@@ -1064,7 +1064,7 @@ $get_params = http_build_query($get_params);
                             if ($file == '.' || (substr($file, 0, 1) == '.' && isset($file_array['extension']) && $file_array['extension'] == RFM::fixStrtolower(__('Type_dir'))) || (isset($file_array['extension']) && $file_array['extension'] != RFM::fixStrtolower(__('Type_dir'))) || ($file == '..' && $subdir == '') || in_array($file, $config['hidden_folders']) || ($filter != '' && $n_files > $config['file_number_limit_js'] && $file != ".." && stripos($file, $filter) === false)) {
                                 continue;
                             }
-                            $new_name = RFM::fixGetParams($file, $config);
+                            $new_name = RFM::fixFilename($file, $config);
                             if ($ftp && $file != '..' && $file != $new_name) {
                                 //rename
                                 RFM::renameFolder($config['current_path'] . $subdir . $file, $new_name, $ftp, $config);

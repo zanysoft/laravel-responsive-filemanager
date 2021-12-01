@@ -2,12 +2,12 @@
 
 namespace ZanySoft\ResponsiveFileManager;
 
-use \Illuminate\Http\Response;
-use \ZanySoft\ResponsiveFileManager\Lib\ImageLib;
-use \ZanySoft\FtpClient\FtpClient;
-use \ZanySoft\FtpClient\FtpException;
-use \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use \Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use ZanySoft\FtpClient\FtpClient;
+use ZanySoft\FtpClient\FtpException;
+use ZanySoft\ResponsiveFileManager\Lib\ImageLib;
 
 class RFM
 {
@@ -121,8 +121,8 @@ class RFM
      *
      * @static
      * @param string $content
-     * @param int    $statusCode
-     * @param array  $headers
+     * @param int $statusCode
+     * @param array $headers
      *
      * @return \Response|\Illuminate\Http\Response
      */
@@ -135,7 +135,7 @@ class RFM
      * Check relative path
      *
      * @static
-     * @param  string  $path
+     * @param string $path
      *
      * @return boolean is it correct?
      */
@@ -153,8 +153,8 @@ class RFM
      * Check if the given path is an upload dir based on config
      *
      * @static
-     * @param  string  $path
-     * @param  array $config
+     * @param string $path
+     * @param array $config
      *
      * @return boolean is it an upload dir?
      */
@@ -172,9 +172,9 @@ class RFM
      * Delete file
      *
      * @static
-     * @param  string  $path
-     * @param  string $path_thumb
-     * @param  array $config
+     * @param string $path
+     * @param string $path_thumb
+     * @param array $config
      *
      * @return null
      */
@@ -207,12 +207,12 @@ class RFM
 
                     if (file_exists(
                         $info['dirname'] . "/" . $path . $config['relative_image_creation_name_to_prepend'][$k] .
-                            $info['filename'] . $config['relative_image_creation_name_to_append'][$k] . "." . $info['extension']
+                        $info['filename'] . $config['relative_image_creation_name_to_append'][$k] . "." . $info['extension']
                     )) {
                         unlink(
                             $info['dirname'] . "/" . $path . $config['relative_image_creation_name_to_prepend'][$k]
-                                . $info['filename'] . $config['relative_image_creation_name_to_append'][$k] .
-                                "." . $info['extension']
+                            . $info['filename'] . $config['relative_image_creation_name_to_append'][$k] .
+                            "." . $info['extension']
                         );
                     }
                 }
@@ -227,11 +227,11 @@ class RFM
                     $base_dir = $path . substr_replace($info['dirname'] . "/", '', 0, strlen($config['current_path']));
                     if (file_exists(
                         $base_dir . $config['fixed_image_creation_name_to_prepend'][$k] . $info['filename'] .
-                            $config['fixed_image_creation_to_append'][$k] . "." . $info['extension']
+                        $config['fixed_image_creation_to_append'][$k] . "." . $info['extension']
                     )) {
                         unlink(
                             $base_dir . $config['fixed_image_creation_name_to_prepend'][$k] . $info['filename'] .
-                                $config['fixed_image_creation_to_append'][$k] . "." . $info['extension']
+                            $config['fixed_image_creation_to_append'][$k] . "." . $info['extension']
                         );
                     }
                 }
@@ -243,7 +243,7 @@ class RFM
      * Delete directory
      *
      * @static
-     * @param  string  $dir
+     * @param string $dir
      *
      * @return  bool
      */
@@ -284,8 +284,8 @@ class RFM
      * Make a file copy
      *
      * @static
-     * @param  string  $old_path
-     * @param  string  $name      New file name without extension
+     * @param string $old_path
+     * @param string $name New file name without extension
      *
      * @return  bool
      */
@@ -319,9 +319,9 @@ class RFM
      * Rename file
      *
      * static
-     * @param  string  $old_path         File to rename
-     * @param  string  $name             New file name without extension
-     * @param  bool    $transliteration
+     * @param string $old_path File to rename
+     * @param string $name New file name without extension
+     * @param bool $transliteration
      *
      * @return bool
      */
@@ -359,9 +359,9 @@ class RFM
      * Rename directory
      *
      * @static
-     * @param  string  $old_path         Directory to rename
-     * @param  string  $name             New directory name
-     * @param  bool    $transliteration
+     * @param string $old_path Directory to rename
+     * @param string $name New directory name
+     * @param bool $transliteration
      *
      * @return bool
      */
@@ -401,11 +401,11 @@ class RFM
      * Create new image from existing file
      *
      * @static
-     * @param  string  $imgfile    Source image file name
-     * @param  string  $imgthumb   Thumbnail file name
-     * @param  int     $newwidth   Thumbnail width
-     * @param  int     $newheight  Optional thumbnail height
-     * @param  string  $option     Type of resize
+     * @param string $imgfile Source image file name
+     * @param string $imgthumb Thumbnail file name
+     * @param int $newwidth Thumbnail width
+     * @param int $newheight Optional thumbnail height
+     * @param string $option Type of resize
      *
      * @return bool
      * @throws \Exception
@@ -418,7 +418,8 @@ class RFM
         $newheight = null,
         $option = "crop",
         $config = array()
-    ) {
+    )
+    {
         $result = false;
         if (isset($config['ftp_host']) && $config['ftp_host']) {
             if (self::urlExists($imgfile)) {
@@ -457,7 +458,7 @@ class RFM
      * Convert convert size in bytes to human readable
      *
      * @static
-     * @param  int  $size
+     * @param int $size
      *
      * @return  string
      */
@@ -477,7 +478,7 @@ class RFM
      * Determine directory size
      *
      * @static
-     * @param  string  $path
+     * @param string $path
      *
      * @return  int
      */
@@ -513,7 +514,7 @@ class RFM
      * Get number of files in a directory
      *
      * @static
-     * @param  string  $path
+     * @param string $path
      *
      * @return  int
      */
@@ -545,7 +546,7 @@ class RFM
      * check if the current folder size plus the added size is over the overall size limite
      *
      * @static
-     * @param  int  $sizeAdded
+     * @param int $sizeAdded
      *
      * @return  bool
      */
@@ -570,8 +571,8 @@ class RFM
      * Create directory for images and/or thumbnails
      *
      * @static
-     * @param  string  $path
-     * @param  string  $path_thumbs
+     * @param string $path
+     * @param string $path_thumbs
      */
     public static function createFolder($path = null, $path_thumbs = null, $ftp = null, $config = null)
     {
@@ -601,8 +602,8 @@ class RFM
      * Check file extension
      *
      * @static
-     * @param  string  $extension
-     * @param  array   $config
+     * @param string $extension
+     * @param array $config
      */
     public static function checkFileExtension($extension, $config)
     {
@@ -628,10 +629,10 @@ class RFM
      * Get file extension present in PHAR file
      *
      * @static
-     * @param  string  $phar
-     * @param  array   $files
-     * @param  string  $basepath
-     * @param  string  $ext
+     * @param string $phar
+     * @param array $files
+     * @param string $basepath
+     * @param string $ext
      */
     public static function checkFilesExtensionsOnPhar($phar, &$files, $basepath, $config)
     {
@@ -654,17 +655,15 @@ class RFM
         }
     }
 
+
     /**
      * Cleanup input
-     *
-     * @static
-     * @param  string  $str
-     *
-     * @return  string
+     * @param $str
+     * @return string
      */
     public static function fixGetParams($str)
     {
-        return static::filter_filename($str);
+        return strip_tags(preg_replace("/[^a-zA-Z0-9\.\[\]_| -]/", '', $str));
     }
 
     private static function filter_filename($filename, $beautify = true)
@@ -719,8 +718,8 @@ class RFM
      * Check extension
      *
      * @static
-     * @param  string  $extension
-     * @param  array   $config
+     * @param string $extension
+     * @param array $config
      *
      * @return bool
      */
@@ -739,7 +738,7 @@ class RFM
      * Sanitize filename
      *
      * @static
-     * @param  string  $str
+     * @param string $str
      *
      * @return string
      */
@@ -752,11 +751,11 @@ class RFM
      * Cleanup filename
      *
      * @static
-     * @param  string  $str
-     * @param  bool    $transliteration
-     * @param  bool    $convert_spaces
-     * @param  string  $replace_with
-     * @param  bool    $is_folder
+     * @param string $str
+     * @param bool $transliteration
+     * @param bool $convert_spaces
+     * @param string $replace_with
+     * @param bool $is_folder
      *
      * @return string
      */
@@ -797,7 +796,7 @@ class RFM
      * Cleanup directory name
      *
      * @static
-     * @param  string  $str
+     * @param string $str
      *
      * @return  string
      */
@@ -810,7 +809,7 @@ class RFM
      * Correct strtoupper handling
      *
      * @static
-     * @param  string  $str
+     * @param string $str
      *
      * @return  string
      */
@@ -827,7 +826,7 @@ class RFM
      * Correct strtolower handling
      *
      * @static
-     * @param  string  $str
+     * @param string $str
      *
      * @return  string
      */
@@ -844,9 +843,9 @@ class RFM
      * Check if memory is enough to process image
      *
      * @static
-     * @param  string  $img
-     * @param  int     $max_breedte
-     * @param  int     $max_hoogte
+     * @param string $img
+     * @param int $max_breedte
+     * @param int $max_hoogte
      *
      * @return bool
      */
@@ -890,8 +889,8 @@ class RFM
      * Check is string is ended with needle
      *
      * @static
-     * @param  string  $haystack
-     * @param  string  $needle
+     * @param string $haystack
+     * @param string $needle
      *
      * @return  bool
      */
@@ -946,8 +945,8 @@ class RFM
                         $ftp,
                         $targetFile,
                         $targetPath . $path . $config['relative_image_creation_name_to_prepend'][$k] .
-                            $info['filename'] . $config['relative_image_creation_name_to_append'][$k] .
-                            "." . $info['extension'],
+                        $info['filename'] . $config['relative_image_creation_name_to_append'][$k] .
+                        "." . $info['extension'],
                         $config['relative_image_creation_width'][$k],
                         $config['relative_image_creation_height'][$k],
                         $config['relative_image_creation_option'][$k]
@@ -972,7 +971,7 @@ class RFM
                     $ftp,
                     $targetFile,
                     $base_dir . $config['fixed_image_creation_name_to_prepend'][$k] . $info['filename'] .
-                        $config['fixed_image_creation_to_append'][$k] . "." . $info['extension'],
+                    $config['fixed_image_creation_to_append'][$k] . "." . $info['extension'],
                     $config['fixed_image_creation_width'][$k],
                     $config['fixed_image_creation_height'][$k],
                     $config['fixed_image_creation_option'][$k]
@@ -989,7 +988,7 @@ class RFM
      * test for dir/file writability properly
      *
      * @static
-     * @param  string  $dir
+     * @param string $dir
      *
      * @return  bool
      */
@@ -1028,7 +1027,7 @@ class RFM
      * Some servers disable copy,rename etc.
      *
      * @static
-     * @param  string  $name
+     * @param string $name
      *
      * @return  bool
      */
@@ -1046,9 +1045,9 @@ class RFM
      * recursivly copies everything
      *
      * @static
-     * @param  string  $source
-     * @param  string  $destination
-     * @param  bool    $is_rec
+     * @param string $source
+     * @param string $destination
+     * @param bool $is_rec
      */
     public static function rcopy($source, $destination, $is_rec = false)
     {
@@ -1093,9 +1092,9 @@ class RFM
      * Need more feedback from users and refactor if needed
      *
      * @static
-     * @param  string  $source
-     * @param  string  $destination
-     * @param  bool    $is_rec
+     * @param string $source
+     * @param string $destination
+     * @param bool $is_rec
      */
     public static function rrename($source, $destination, $is_rec = false)
     {
@@ -1155,10 +1154,10 @@ class RFM
     /**
      * Recursive chmod
      * @static
-     * @param  string  $source
-     * @param  int     $mode
-     * @param  string  $rec_option
-     * @param  bool    $is_rec
+     * @param string $source
+     * @param int $mode
+     * @param string $rec_option
+     * @param bool $is_rec
      */
     public static function rchmod($source, $mode, $rec_option = "none", $is_rec = false)
     {
@@ -1189,9 +1188,9 @@ class RFM
     }
 
     /**
-     * @param  string  $input
-     * @param  bool    $trace
-     * @param  bool    $halt
+     * @param string $input
+     * @param bool $trace
+     * @param bool $halt
      */
     public static function debugger($input, $trace = false, $halt = false)
     {
@@ -1230,14 +1229,14 @@ class RFM
 
     /**
      * @static
-     * @param  string  $version
+     * @param string $version
      *
      * @return  bool
      */
     public static function isPhp($version = '5.0.0')
     {
         static $phpVer;
-        $version = (string) $version;
+        $version = (string)$version;
 
         if (!isset($phpVer[$version])) {
             $phpVer[$version] = (version_compare(PHP_VERSION, $version) < 0) ? false : true;
@@ -1249,7 +1248,7 @@ class RFM
     /**
      * Return the caller location if set in config.php
      * @static
-     * @param  string  $version
+     * @param string $version
      *
      * @return  bool
      */
@@ -1294,20 +1293,20 @@ class RFM
          * eg: zh_CN -> if zh == $preferredLang
          */
         return current(array_filter(array_keys($availableLangs), function ($lang) use ($preferredLang) {
-            if ($preferredLang === $lang) {
-                return true;
-            }
-
-            $superLang = false;
-
-            if (false !== $position = strpos($lang, '_')) {
-                $superLang = substr($lang, 0, $position);
-                if ($preferredLang === $superLang) {
+                if ($preferredLang === $lang) {
                     return true;
                 }
-            }
-            return false;
-        })) ?? $preferredLang;
+
+                $superLang = false;
+
+                if (false !== $position = strpos($lang, '_')) {
+                    $superLang = substr($lang, 0, $position);
+                    if ($preferredLang === $superLang) {
+                        return true;
+                    }
+                }
+                return false;
+            })) ?? $preferredLang;
     }
 
     /**
