@@ -249,6 +249,8 @@ class RFM
      */
     public static function deleteDir($dir, $ftp = null, $config = null)
     {
+        $dir = str_replace('\\', '/', $dir);
+
         if ($ftp) {
             try {
                 $ftp->rmdir('/' . config('rfm.ftp_base_folder') . '/' . $dir);
@@ -271,7 +273,8 @@ class RFM
                 if ($item == '.' || $item == '..') {
                     continue;
                 }
-                if (!self::deleteDir($dir . DIRECTORY_SEPARATOR . $item)) {
+
+                if (!self::deleteDir($dir . DIRECTORY_SEPARATOR . $item, $ftp, $config)) {
                     return false;
                 }
             }

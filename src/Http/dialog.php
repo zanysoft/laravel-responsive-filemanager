@@ -2,6 +2,7 @@
 
 use \FtpClient\FtpException;
 use \Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 use \ZanySoft\ResponsiveFileManager\RFM;
 
 session()->start();
@@ -154,6 +155,10 @@ if (!$ftp) {
         } else {
             $parent = RFM::fixDirname($parent) . "/";
         }
+    }
+
+    if (!Str::startsWith($thumbs_path, public_path('/'))) {
+        $thumbs_path = public_path($thumbs_path);
     }
 
     if (!is_dir($thumbs_path)) {

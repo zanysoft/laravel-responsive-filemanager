@@ -53,9 +53,9 @@ if (!defined('FM_DEBUG_ERROR_MESSAGE')) {
 
 // CHANGE HERE FILES AND THUMBS PATH
 // path from public folder !!Accessible to All!!
-$upload_dir = 'uploads/files/';
+$upload_dir = 'uploads/';
 $thumbs_upload_dir = 'thumbs/';
-$current_path = 'uploads/files/';
+$current_path = 'uploads/';
 $thumbs_base_path = 'thumbs/';
 
 $config = array(
@@ -243,7 +243,7 @@ $config = array(
     | default language file name
     |--------------------------------------------------------------------------
     */
-    'default_language' => false,
+    'default_language' => 'en_EN',
 
     /*
     |--------------------------------------------------------------------------
@@ -260,7 +260,7 @@ $config = array(
     //Show or not total size in filemanager (is possible to greatly increase the calculations)
     'show_total_size'                       => false,
     //Show or not show folder size in list view feature in filemanager (is possible, if there is a large folder, to greatly increase the calculations)
-    'show_folder_size'                      => false,
+    'show_folder_size'                      => true,
     //Show or not show sorting feature in filemanager
     'show_sorting_bar'                      => true,
     //Show or not show filters button in filemanager
@@ -380,7 +380,7 @@ $config = array(
     'preview_text_files'                      => true, // eg.: txt, log etc.
     'edit_text_files'                         => true, // eg.: txt, log etc.
     'create_text_files'                       => true, // only create files with exts. defined in $config['editable_text_file_exts']
-    'download_files'              => true, // allow download files or just preview
+    'download_files'                          => true, // allow download files or just preview
 
     // you can preview these type of files if $preview_text_files is true
     'previewable_text_file_exts'              => array("bsh", "c", "css", "cc", "cpp", "cs", "csh", "cyc", "cv", "htm", "html", "java", "js", "m", "mxml", "perl", "pl", "pm", "py", "rb", "sh", "xhtml", "xml", "xsl", 'txt', 'log', ''),
