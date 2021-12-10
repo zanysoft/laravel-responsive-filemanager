@@ -3,8 +3,13 @@
   "description": "Integrate Alberto Peripolli's Responsive File Manager with Laravel",
   "keywords": [
     "laravel",
+    "tinymce",
+    "ckeditor",
     "responsive",
-    "filemanager"
+    "filemanager",
+    "laravel-filemanager",
+    "responsive-filemanager",
+    "tinymce-filemanager"
   ],
   "license": "MIT",
   "authors": [
