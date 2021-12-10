@@ -749,7 +749,8 @@ var encodeURL, show_animation, hide_animation, apply, apply_none, apply_img, app
                 </p></div>\
                 <div class="text-center">\
                 <p><strong>Laravel adpatation&nbsp;<a href="http://zanysoft.net">Zany Soft</a></strong><br>\
-                <a href="https://github.com/zanysoft/laravel-responsive-filemanager">Laravel Responsive Filemanager</a><strong>&nbsp;v.' + $('#version').text() + '</strong><br>\
+                <a href="https://github.com/zanysoft/laravel-responsive-filemanager">Laravel Responsive Filemanager</a>\
+                <img alt="GitHub Version" src="https://img.shields.io/github/v/tag/zanysoft/laravel-responsive-filemanager?label=">\
                 <a href="https://github.com/zanysoft/laravel-responsive-filemanager/blob/master/LICENSE">Licence MIT</a></p>\
                 </div > ');
         });
