@@ -140,6 +140,7 @@ with tinymce parameters
         toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor  | print preview code ",
         image_advtab: true ,
         filemanager_access_key: '@filemanager_get_key()',
+        filemanager_relative_url: true,
         filemanager_sort_by: '',
         filemanager_descending: '',
         filemanager_subfolder: '',
