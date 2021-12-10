@@ -58,7 +58,7 @@ class FileManagerServiceProvider extends ServiceProvider
         $config = \Config::get('rfm');
 
         if (!empty($config)) {
-            $config['base_url'] = $this->fixPath($config['base_url']);
+            $config['base_url'] = str_replace('\\', '/', $config['base_url']);
             $config['upload_dir'] = $upload_dir = $this->fixPath($config['upload_dir'], true) . '/';
             $config['current_path'] = $current_path = $this->fixPath($config['current_path'], true) . '/';
             $config['thumbs_upload_dir'] = $thumbs_upload_dir = $this->fixPath($config['thumbs_upload_dir'], true) . '/';
