@@ -1,6 +1,6 @@
 <?php
 
-namespace ZanySoft\ResponsiveFileManager\Lib;
+namespace Snowsoft\ResponsiveFileManager\Lib;
 
 /**
  * @author Alberto Peripolli https://responsivefilemanager.com/#contact-section

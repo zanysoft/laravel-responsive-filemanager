@@ -2,7 +2,7 @@
 
 use \Illuminate\Routing\Matching\UriValidator;
 use \Illuminate\Support\Facades\Request;
-use \ZanySoft\ResponsiveFileManager\RFM;
+use \Snowsoft\ResponsiveFileManager\RFM;
 use \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 $config = config('rfm');

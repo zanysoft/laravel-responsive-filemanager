@@ -1,8 +1,8 @@
 <?php
 
-namespace ZanySoft\ResponsiveFileManager\Lib;
+namespace Snowsoft\ResponsiveFileManager\Lib;
 
-use \ZanySoft\ResponsiveFileManager\RFM;
+use \Snowsoft\ResponsiveFileManager\RFM;
 use \Exception as _Exception;
 
 // ========================================================================#

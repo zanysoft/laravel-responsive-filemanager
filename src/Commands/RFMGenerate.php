@@ -1,6 +1,6 @@
 <?php
 
-namespace ZanySoft\ResponsiveFileManager\Commands;
+namespace Snowsoft\ResponsiveFileManager\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;

@@ -1,6 +1,6 @@
 {
-  "name": "zanysoft/laravel-responsive-filemanager",
-  "description": "Integrate Alberto Peripolli's Responsive File Manager with Laravel",
+  "name": "nlksoft/laravel-responsive-filemanager",
+  "description": "Responsive File Manager with Laravel",
   "keywords": [
     "laravel",
     "tinymce",
@@ -14,24 +14,24 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "Mubashar Ahmad",
-      "email": "info@zanysoft.net"
+      "name": "Abdulkadir KAR",
+      "email": "kadir@nlksoft.com"
     }
   ],
   "require": {
-    "php": ">=7.1",
-    "illuminate/support": "^7.0|^8.0"
+    "php": ">=7.1|>=8.1",
+    "illuminate/support": "^7.0|^8.0|^9.0"
   },
   "autoload": {
     "psr-4": {
-      "ZanySoft\\ResponsiveFileManager\\": "src/",
-      "ZanySoft\\FtpClient\\": "src/FtpClient/"
+      "Snowsoft\\ResponsiveFileManager\\": "src/",
+      "Snowsoft\\FtpClient\\": "src/FtpClient/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "ZanySoft\\ResponsiveFileManager\\FileManagerServiceProvider"
+        "Snowsoft\\ResponsiveFileManager\\FileManagerServiceProvider"
       ]
     }
   },

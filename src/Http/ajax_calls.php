@@ -14,7 +14,7 @@
  * Mountain View, California, 94041, USA.
  */
 
-use \ZanySoft\ResponsiveFileManager\RFM;
+use \Snowsoft\ResponsiveFileManager\RFM;
 use \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use \ZipArchive as _ZipArchive;
 use \PharData as _PharData;

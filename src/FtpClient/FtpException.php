@@ -10,7 +10,7 @@
  * @copyright Nicolas Tallefourtane http://nicolab.net
  */
 
-namespace ZanySoft\FtpClient;
+namespace Snowsoft\FtpClient;
 
 /**
  * The FtpException class.

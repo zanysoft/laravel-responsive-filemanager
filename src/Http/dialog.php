@@ -3,7 +3,7 @@
 use \FtpClient\FtpException;
 use \Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
-use \ZanySoft\ResponsiveFileManager\RFM;
+use \Snowsoft\ResponsiveFileManager\RFM;
 
 session()->start();
 

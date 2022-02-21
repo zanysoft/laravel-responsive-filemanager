@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
-use ZanySoft\ResponsiveFileManager\RfmResources;
+use Snowsoft\ResponsiveFileManager\RfmResources;
 
 if (!function_exists('filemanager_get_key')) {
 
