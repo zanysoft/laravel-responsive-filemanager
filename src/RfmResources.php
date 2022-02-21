@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ZanySoft\ResponsiveFileManager;
+namespace Snowsoft\ResponsiveFileManager;
 
 
 class RfmResources

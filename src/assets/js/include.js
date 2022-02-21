@@ -748,10 +748,10 @@ var encodeURL, show_animation, hide_animation, apply, apply_none, apply_img, app
                 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons Attribution - NonCommercial 3.0 Unported License</a>.</small >\
                 </p></div>\
                 <div class="text-center">\
-                <p><strong>Laravel adpatation&nbsp;<a href="http://zanysoft.net">Zany Soft</a></strong><br>\
-                <a href="https://github.com/zanysoft/laravel-responsive-filemanager">Laravel Responsive Filemanager</a>\
-                <img alt="GitHub Version" src="https://img.shields.io/github/v/tag/zanysoft/laravel-responsive-filemanager?label="><br>\
-                <a href="https://github.com/zanysoft/laravel-responsive-filemanager/blob/master/LICENSE">Licence MIT</a></p>\
+                <p><strong>Laravel adpatation&nbsp;<a href="http://Snowsoft.net">Zany Soft</a></strong><br>\
+                <a href="https://github.com/Snowsoft/laravel-responsive-filemanager">Laravel Responsive Filemanager</a>\
+                <img alt="GitHub Version" src="https://img.shields.io/github/v/tag/Snowsoft/laravel-responsive-filemanager?label="><br>\
+                <a href="https://github.com/Snowsoft/laravel-responsive-filemanager/blob/master/LICENSE">Licence MIT</a></p>\
                 </div > ');
         });
 

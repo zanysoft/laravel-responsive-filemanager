@@ -1,11 +1,11 @@
 <?php
 
-namespace ZanySoft\ResponsiveFileManager;
+namespace Snowsoft\ResponsiveFileManager;
 
 use \Exception as _Exception;
 use \stdClass as _stdClass;
-use ZanySoft\ResponsiveFileManager\RFM;
-use ZanySoft\ResponsiveFileManager\Lib\ImageLib;
+use Snowsoft\ResponsiveFileManager\RFM;
+use Snowsoft\ResponsiveFileManager\Lib\ImageLib;
 
 class UploadHandler
 {

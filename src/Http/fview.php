@@ -3,13 +3,13 @@
 /**
  * RFM command line Interface
  * Mostly used to generate RFM private key
- * @author   Zany Soft <info@zanysoft.net>
+ * @author   Zany Soft <info@Snowsoft.net>
  * @license  MIT https://choosealicense.com/licenses/mit/
  * @version  GIT:
- * @link     https://github.com/zanysoft/laravel-responsive-filemanager/blob/master/resources/filemanager/fview.php
+ * @link     https://github.com/Snowsoft/laravel-responsive-filemanager/blob/master/resources/filemanager/fview.php
  */
 
-use \ZanySoft\ResponsiveFileManager\RFM;
+use \Snowsoft\ResponsiveFileManager\RFM;
 
 $local_file_path_to_download = RFM::getLocalFileFromEncrypted(request()->get('ox'));
 

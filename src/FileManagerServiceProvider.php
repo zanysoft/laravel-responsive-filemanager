@@ -1,6 +1,6 @@
 <?php
 
-namespace ZanySoft\ResponsiveFileManager;
+namespace Snowsoft\ResponsiveFileManager;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 class FileManagerServiceProvider extends ServiceProvider
 {
     protected $commands = [
-        'ZanySoft\ResponsiveFileManager\Commands\RFMGenerate'
+        'Snowsoft\ResponsiveFileManager\Commands\RFMGenerate'
     ];
 
 

@@ -1,6 +1,6 @@
 <?php
 
-use \ZanySoft\ResponsiveFileManager\RFM;
+use \Snowsoft\ResponsiveFileManager\RFM;
 
 mb_internal_encoding('UTF-8');
 mb_http_output('UTF-8');

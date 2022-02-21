@@ -10,7 +10,7 @@
  * @copyright Nicolas Tallefourtane http://nicolab.net
  */
 
-namespace ZanySoft\FtpClient;
+namespace Snowsoft\FtpClient;
 
 /**
  * Wrap the PHP FTP functions

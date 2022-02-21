@@ -1,19 +1,12 @@
 # Laravel-Responsive-FileManager
 
-[![Downloads](https://img.shields.io/packagist/dt/zanysoft/laravel-responsive-filemanager.svg?style=flat-square)](https://packagist.org/packages/zanysoft/laravel-responsive-filemanager)
-[![GitHub license](https://img.shields.io/badge/License-MIT-informational.svg)](https://github.com/zanysoft/laravel-responsive-filemanager/blob/master/LICENSE)
+[![Downloads](https://img.shields.io/packagist/dt/Snowsoft/laravel-responsive-filemanager.svg?style=flat-square)](https://packagist.org/packages/Snowsoft/laravel-responsive-filemanager)
+[![GitHub license](https://img.shields.io/badge/License-MIT-informational.svg)](https://github.com/Snowsoft/laravel-responsive-filemanager/blob/master/LICENSE)
 [![GitHub license](https://img.shields.io/badge/Licence-CC%20BY%20NC%203.0-informational.svg)](https://creativecommons.org/licenses/by-nc/3.0/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-informational.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
-[![GitHub tag](https://img.shields.io/github/tag/ZanySoft/laravel-responsive-filemanager.svg?style=flat&logo=laravel&color=informational)](https://github.com/zanysoft/laravel-responsive-filemanager/tags)
+[![GitHub tag](https://img.shields.io/github/tag/Snowsoft/laravel-responsive-filemanager.svg?style=flat&logo=laravel&color=informational)](https://github.com/Snowsoft/laravel-responsive-filemanager/tags)
 
-This software includes a modified version of [Responsive File Manager](https://github.com/trippo/ResponsiveFilemanager) *see [official website](https://responsivefilemanager.com/)*
-
-## *Responsive File Manager (RFM) is licenced under CC BY-NC 3.0 which means software can't be redistributed for a commercial use.*
-
-![CC BY-NC 3.0](http://i.creativecommons.org/l/by-nc/3.0/88x31.png)
-
-**If you wan't to use it for comercial purpose take a look on [the author (Alberto Peripolli
-) website](https://responsivefilemanager.com/#download-section)**
+ 
 
 This repo is under MIT Licence except parts where antoher licence is mentioned in file.
 
@@ -31,7 +24,7 @@ ___
 
 ### *Install in your project*
 
-    composer require zanysoft/laravel-responsive-filemanager
+    composer require Snowsoft/laravel-responsive-filemanager
 
 Now there is a new configuration file ```rfm.php```
 
@@ -43,7 +36,7 @@ Install in ```config/app.php```
              */
             ...
             // Responsive File Manager
-            ZanySoft\ResponsiveFileManager\FileManagerServiceProvider::class
+            Snowsoft\ResponsiveFileManager\FileManagerServiceProvider::class
     ],
 
 In ```app/Http/Kernel.php``` need to use StartSession, can also use and is recommended CSRF Token
@@ -61,7 +54,7 @@ In ```app/Http/Kernel.php``` need to use StartSession, can also use and is recom
 
 then do
 
-    php artisan vendor:publish --provider="ZanySoft\ResponsiveFileManager\FileManagerServiceProvider"
+    php artisan vendor:publish --provider="Snowsoft\ResponsiveFileManager\FileManagerServiceProvider"
 
 Generate private key for url identification
 

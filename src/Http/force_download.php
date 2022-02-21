@@ -14,8 +14,8 @@
  * Mountain View, California, 94041, USA.
  */
 
-use \ZanySoft\ResponsiveFileManager\RFM;
-use \ZanySoft\ResponsiveFileManager\Lib\RfmMimeTypesLib;
+use \Snowsoft\ResponsiveFileManager\RFM;
+use \Snowsoft\ResponsiveFileManager\Lib\RfmMimeTypesLib;
 
 /**
  * Check RF session

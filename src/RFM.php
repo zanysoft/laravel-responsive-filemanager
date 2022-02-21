@@ -1,13 +1,13 @@
 <?php
 
-namespace ZanySoft\ResponsiveFileManager;
+namespace Snowsoft\ResponsiveFileManager;
 
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use ZanySoft\FtpClient\FtpClient;
-use ZanySoft\FtpClient\FtpException;
-use ZanySoft\ResponsiveFileManager\Lib\ImageLib;
+use Snowsoft\FtpClient\FtpClient;
+use Snowsoft\FtpClient\FtpException;
+use Snowsoft\ResponsiveFileManager\Lib\ImageLib;
 
 class RFM
 {

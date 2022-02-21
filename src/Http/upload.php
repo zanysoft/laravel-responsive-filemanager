@@ -2,9 +2,9 @@
 
 use \Exception as _Exception;
 use \stdClass as _stdClass;
-use \ZanySoft\ResponsiveFileManager\RFM;
-use \ZanySoft\ResponsiveFileManager\UploadHandler;
-use \ZanySoft\ResponsiveFileManager\Lib\RfmMimeTypesLib;
+use \Snowsoft\ResponsiveFileManager\RFM;
+use \Snowsoft\ResponsiveFileManager\UploadHandler;
+use \Snowsoft\ResponsiveFileManager\Lib\RfmMimeTypesLib;
 
 $config = config('rfm');
 

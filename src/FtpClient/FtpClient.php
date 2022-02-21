@@ -10,11 +10,11 @@
  * @copyright Nicolas Tallefourtane http://nicolab.net
  */
 
-namespace ZanySoft\FtpClient;
+namespace Snowsoft\FtpClient;
 
 use \Countable;
-use \ZanySoft\FtpClient\FtpWrapper;
-use \ZanySoft\FtpClient\FtpException;
+use \Snowsoft\FtpClient\FtpWrapper;
+use \Snowsoft\FtpClient\FtpException;
 
 /**
  * The FTP and SSL-FTP client for PHP.
