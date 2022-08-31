@@ -178,15 +178,15 @@ class ImageLib
     private $imageSize;
     private $fileExtension;
 
-    private $debug      = true;
+    private $debug = true;
     private $errorArray = array();
 
-    private $forceStretch        = true;
+    private $forceStretch = true;
     private $aggresiveSharpening = false;
 
     private $transparentArray = array('.png', '.gif');
     private $keepTransparency = true;
-    private $fillColorArray   = array('r' => 255, 'g' => 255, 'b' => 255);
+    private $fillColorArray = array('r' => 255, 'g' => 255, 'b' => 255);
 
     private $sharpenArray = array('jpg');
 
@@ -2120,7 +2120,7 @@ class ImageLib
                 break;
 
 
-                // ... etc
+            // ... etc
 
             default:
                 $img = false;
@@ -2137,13 +2137,18 @@ class ImageLib
         $this->__construct($this->fileName);
     }
 
+    function is_gd_image($var): bool
+    {
+        return (gettype($var) == "object" && get_class($var) == "GdImage");
+    }
+
     // --------------------------------------------------------
 
     public function saveImage($savePath, $imageQuality = "100")
     {
-
+        $is_gd_image = $this->is_gd_image($this->imageResized);
         // *** Perform a check or two.
-        if (!is_resource($this->imageResized)) {
+        if (!$is_gd_image && !is_resource($this->imageResized)) {
             if ($this->debug) {
                 throw new _Exception('saveImage: This is not a resource.');
             } else {
@@ -2212,7 +2217,7 @@ class ImageLib
                 break;
 
 
-                // ... etc
+            // ... etc
 
             default:
                 // *** No extension - No save.
@@ -2270,7 +2275,7 @@ class ImageLib
                 echo 'bmp file format is not supported.';
                 break;
 
-                // ... etc
+            // ... etc
 
             default:
                 // *** No extension - No save.
@@ -2683,8 +2688,8 @@ class ImageLib
         //2 : Chargement des ent�tes BMP
         $BMP = unpack(
             'Vheader_size/Vwidth/Vheight/vplanes/vbits_per_pixel' .
-                '/Vcompression/Vsize_bitmap/Vhoriz_resolution' .
-                '/Vvert_resolution/Vcolors_used/Vcolors_important',
+            '/Vcompression/Vsize_bitmap/Vhoriz_resolution' .
+            '/Vvert_resolution/Vcolors_used/Vcolors_important',
             fread($f1, 40)
         );
         $BMP['colors'] = pow(2, $BMP['bits_per_pixel']);
