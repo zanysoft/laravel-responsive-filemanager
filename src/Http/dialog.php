@@ -247,7 +247,14 @@ if (isset($_GET["descending"])) {
 
 $boolarray = array(false => 'false', true => 'true');
 
-$return_relative_url = isset($_GET['relative_url']) && $_GET['relative_url'] == "1" ? true : false;
+$return_relative_url = false;
+
+$relative_url = $_GET['relative_url'] ?? $config['return_relative_url'] ?? $config['relative_url'] ?? false;
+if ($relative_url) {
+    if ($relative_url === "1" || $relative_url === "true" || $relative_url === true || $relative_url == 1) {
+        $return_relative_url = true;
+    }
+}
 
 if (!isset($_GET['type'])) {
     $_GET['type'] = 0;
@@ -353,10 +360,10 @@ $get_params = http_build_query($get_params);
     <link href="<?php echo $vendor_path; ?>css/style.css?v=<?php echo $version; ?>" rel="stylesheet" type="text/css"/>
     <!--[if lt IE 8]>
     <style>
-        .img-container span, .img-container-mini span {
-            display: inline-block;
-            height: 100%;
-        }
+    .img-container span, .img-container-mini span {
+        display: inline-block;
+        height: 100%;
+    }
     </style>
     <![endif]-->
 
@@ -584,6 +591,8 @@ $get_params = http_build_query($get_params);
                                     </tr>
                                 {% } %}
 
+
+                            
                             </script>
                             <!-- The template to display files available for download -->
                             <script id="template-download" type="text/x-tmpl">
@@ -617,6 +626,8 @@ $get_params = http_build_query($get_params);
                                     </tr>
                                 {% } %}
 
+
+                            
                             </script>
                         </div>
                         <?php if ($config['url_upload']) { ?>
