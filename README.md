@@ -143,6 +143,7 @@ with tinymce parameters
         filemanager_relative_url: true,
         filemanager_sort_by: '',
         filemanager_descending: '',
+        filemanager_basefolder: '',
         filemanager_subfolder: '',
         filemanager_crossdomain: '',
         external_filemanager_path: '@external_filemanager_path()',
