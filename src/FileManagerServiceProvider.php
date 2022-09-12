@@ -44,6 +44,7 @@ class FileManagerServiceProvider extends ServiceProvider
 
         $FM_PUBLISH = [];
         $FM_PUBLISH[__DIR__ . $FMPRIVPATH . 'config/config.php'] = config_path('rfm.php');//phpcs:ignore
+        $FM_PUBLISH[__DIR__ . $FMPRIVPATH . '/plugin.js'] = public_path($FMPUBPATH . '/plugin.js');//phpcs:ignore
         $FM_PUBLISH[__DIR__ . $FMPRIVPATH . '/plugin.min.js'] = public_path($FMPUBPATH . '/plugin.min.js');//phpcs:ignore
         $FM_PUBLISH[__DIR__ . $FMPRIVPATH . '/css'] = public_path($FMPUBPATH . '/css');//phpcs:ignore
         $FM_PUBLISH[__DIR__ . $FMPRIVPATH . '/img'] = public_path($FMPUBPATH . '/img');//phpcs:ignore

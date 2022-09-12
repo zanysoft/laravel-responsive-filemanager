@@ -16,7 +16,6 @@ tinymce.PluginManager.add('filemanager', function (editor) {
     editor.settings.file_picker_types = 'file image media';
     editor.settings.file_picker_callback = filemanager;
 
-
     function filemanager_onMessage(event) {
         if (editor.settings.external_filemanager_path.toLowerCase().indexOf(event.origin.toLowerCase()) === 0) {
             if (event.data.sender === 'responsivefilemanager') {
@@ -36,12 +35,8 @@ tinymce.PluginManager.add('filemanager', function (editor) {
     function filemanager(callback, value, meta) {
         var width = window.innerWidth - 30;
         var height = window.innerHeight - 60;
-        if (width > 1800) {
-            width = 1800;
-        }
-        if (height > 1200) {
-            height = 1200;
-        }
+        if (width > 1800) width = 1800;
+        if (height > 1200) height = 1200;
         if (width > 600) {
             var width_reduce = (width - 20) % 138;
             width = width - width_reduce + 10;
@@ -87,18 +82,20 @@ tinymce.PluginManager.add('filemanager', function (editor) {
             fldr = "&fldr=" + editor.settings.filemanager_config.subfolder;
         }
 
+        var base_fldr = "";
+        if (typeof editor.settings.filemanager_base_folder !== "undefined" && editor.settings.filemanager_base_folder) {
+            base_fldr = "&base_fldr=" + editor.settings.filemanager_base_folder;
+        } else if (typeof editor.settings.filemanager_basefolder !== "undefined" && editor.settings.filemanager_basefolder) {
+            base_fldr = "&base_fldr=" + editor.settings.filemanager_basefolder;
+        } else if (typeof editor.settings.filemanager_config.base_folder !== "undefined" && editor.settings.filemanager_config.base_folder) {
+            base_fldr = "&base_fldr=" + editor.settings.filemanager_config.base_folder;
+        }
+
         var relative_url = "";
         if (typeof editor.settings.filemanager_relative_url !== "undefined" && editor.settings.filemanager_relative_url) {
             relative_url = "&relative_url=" + editor.settings.filemanager_relative_url;
         } else if (typeof editor.settings.filemanager_config.relative_url !== "undefined" && editor.settings.filemanager_config.relative_url) {
             relative_url = "&relative_url=" + editor.settings.filemanager_config.relative_url;
-        }
-
-        var upload_dir = "";
-        if (typeof editor.settings.filemanager_upload_dir !== "undefined") {
-            upload_dir = "&upload_dir=" + encodeURIComponent(editor.settings.filemanager_upload_dir);
-        } else if (typeof editor.settings.filemanager_config.upload_dir !== "undefined") {
-            upload_dir = "&upload_dir=" + encodeURIComponent(editor.settings.filemanager_config.upload_dir);
         }
 
         var can_delete = "";
@@ -118,7 +115,6 @@ tinymce.PluginManager.add('filemanager', function (editor) {
         }
         if (crossdomain) {
             crossdomain = "&crossdomain=1";
-
             // Add handler for a message from ResponsiveFilemanager
             if (window.addEventListener) {
                 window.addEventListener('message', filemanager_onMessage, false);
@@ -134,7 +130,7 @@ tinymce.PluginManager.add('filemanager', function (editor) {
             }
         }, false);
 
-        var dialogUrl = editor.settings.external_filemanager_path + 'dialog.php?type=' + urltype + '&descending=' + descending + sort_by + fldr + crossdomain + '&lang=' + editor.settings.language + '&akey=' + akey + relative_url + upload_dir + can_delete + can_rename;
+        var dialogUrl = editor.settings.external_filemanager_path + 'dialog.php?type=' + urltype + '&descending=' + descending + sort_by + fldr + base_fldr + crossdomain + '&lang=' + editor.settings.language + '&akey=' + akey + relative_url + can_delete + can_rename;
 
         if (tinymce.majorVersion > 4) {
             tinymce.activeEditor.windowManager.openUrl({
@@ -142,9 +138,9 @@ tinymce.PluginManager.add('filemanager', function (editor) {
                 url: dialogUrl,
                 width: width,
                 height: height,
-                resizable: true,
-                maximizable: true,
                 inline: 1,
+                resizable: true,
+                maximizable: true
             });
         } else {
             tinymce.activeEditor.windowManager.open({
@@ -152,9 +148,9 @@ tinymce.PluginManager.add('filemanager', function (editor) {
                 file: dialogUrl,
                 width: width,
                 height: height,
-                resizable: true,
-                maximizable: true,
                 inline: 1,
+                resizable: true,
+                maximizable: true
             });
         }
     }

@@ -1,8 +1,7 @@
 <?php
 
-use \FtpClient\FtpException;
-use \Illuminate\Support\Facades\App;
-use Illuminate\Support\Str;
+use \ZanySoft\FtpClient\FtpException;
+use \Illuminate\Support\Str;
 use \ZanySoft\ResponsiveFileManager\RFM;
 
 session()->start();
@@ -38,7 +37,7 @@ $subdir_path = '';
 
 if (isset($_GET['fldr']) && !empty($_GET['fldr'])) {
     $subdir_path = rawurldecode(trim(strip_tags($_GET['fldr']), "/"));
-} elseif (session()->has('RF.fldr') && !session()->has('RF.fldr')) {
+} elseif (session()->has('RF.fldr') && !empty(session('RF.fldr'))) {
     $subdir_path = rawurldecode(trim(strip_tags(session('RF.fldr')), "/"));
 }
 
@@ -85,10 +84,12 @@ if ($config['show_total_size']) {
 if (!session()->has('RF.subfolder')) {
     session()->put('RF.subfolder', '');
 }
-$rfm_subfolder = '';
 
-if (
-    session()->has('RF.subfolder')
+$rfm_subfolder = '';
+if (isset($_GET['base_fldr']) && !empty($_GET['base_fldr'])) {
+    $rfm_subfolder = rawurldecode(trim(strip_tags($_GET['base_fldr']), "/"));
+} elseif (session()->has('RF.subfolder')
+    && !empty(session('RF.subfolder'))
     && strpos(session('RF.subfolder'), "/") !== 0
     && strpos(session('RF.subfolder'), '.') === false
 ) {
@@ -360,10 +361,10 @@ $get_params = http_build_query($get_params);
     <link href="<?php echo $vendor_path; ?>css/style.css?v=<?php echo $version; ?>" rel="stylesheet" type="text/css"/>
     <!--[if lt IE 8]>
     <style>
-    .img-container span, .img-container-mini span {
-        display: inline-block;
-        height: 100%;
-    }
+        .img-container span, .img-container-mini span {
+            display: inline-block;
+            height: 100%;
+        }
     </style>
     <![endif]-->
 
@@ -590,9 +591,6 @@ $get_params = http_build_query($get_params);
                                         </td>
                                     </tr>
                                 {% } %}
-
-
-                            
                             </script>
                             <!-- The template to display files available for download -->
                             <script id="template-download" type="text/x-tmpl">
@@ -625,9 +623,6 @@ $get_params = http_build_query($get_params);
                                         <td></td>
                                     </tr>
                                 {% } %}
-
-
-                            
                             </script>
                         </div>
                         <?php if ($config['url_upload']) { ?>
