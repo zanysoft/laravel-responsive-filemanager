@@ -145,7 +145,7 @@ with tinymce parameters
         filemanager_descending: '',
         filemanager_subfolder: '',
         filemanager_crossdomain: '',
-        external_filemanager_path: '@filemanager_get_resource(dialog.php)',
+        external_filemanager_path: '@external_filemanager_path()',
         filemanager_title:"Responsive Filemanager" ,
         external_plugins: { "filemanager" : "/vendor/responsivefilemanager/plugin.min.js"}
         });
