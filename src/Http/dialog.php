@@ -86,8 +86,8 @@ if (!session()->has('RF.subfolder')) {
 }
 
 $rfm_subfolder = '';
-if (isset($_GET['base_fldr']) && !empty($_GET['base_fldr'])) {
-    $rfm_subfolder = rawurldecode(trim(strip_tags($_GET['base_fldr']), "/"));
+if (request()->has('base_fldr') && !empty(request()->get('base_fldr'))) {
+    $rfm_subfolder = rawurldecode(trim(strip_tags(request()->get('base_fldr')), "/"));
 } elseif (session()->has('RF.subfolder')
     && !empty(session('RF.subfolder'))
     && strpos(session('RF.subfolder'), "/") !== 0
@@ -102,11 +102,16 @@ if ($rfm_subfolder != "" && $rfm_subfolder[strlen($rfm_subfolder) - 1] != "/") {
 
 $ftp = RFM::ftpCon($config);
 
+if (($ftp && !$ftp->isDir($config['ftp_base_folder'] . $config['upload_dir'] . $rfm_subfolder)) ||
+    (!$ftp && !file_exists($config['current_path'] . $rfm_subfolder))
+) {
+    $rfm_subfolder = "";
+}
+
 if (($ftp && !$ftp->isDir($config['ftp_base_folder'] . $config['upload_dir'] . $rfm_subfolder . $subdir)) ||
     (!$ftp && !file_exists($config['current_path'] . $rfm_subfolder . $subdir))
 ) {
     $subdir = '';
-    $rfm_subfolder = "";
 }
 
 
@@ -158,12 +163,12 @@ if (!$ftp) {
         }
     }
 
-    if (!Str::startsWith($thumbs_path, public_path('/'))) {
-        $thumbs_path = public_path($thumbs_path);
+    if (!Str::startsWith($thumbs_path, '/')) {
+        $thumbs_path = '/' . $thumbs_path;
     }
 
-    if (!is_dir($thumbs_path)) {
-        RFM::createFolder(false, $thumbs_path, $ftp, $config);
+    if (!is_dir(public_path($thumbs_path))) {
+        RFM::createFolder(false, public_path($thumbs_path), $ftp, $config);
     }
 }
 
@@ -326,7 +331,8 @@ $get_params = array(
     'field_id' => $field_id,
     'multiple' => $multiple,
     'relative_url' => $return_relative_url,
-    'akey' => (isset($_GET['akey']) && $_GET['akey'] != '' ? $_GET['akey'] : 'key')
+    'akey' => (isset($_GET['akey']) && $_GET['akey'] != '' ? $_GET['akey'] : 'key'),
+    'base_fldr' => $rfm_subfolder
 );
 if (isset($_GET['CKEditorFuncNum'])) {
     $get_params['CKEditorFuncNum'] = $_GET['CKEditorFuncNum'];
@@ -464,6 +470,7 @@ $get_params = http_build_query($get_params);
 <input type="hidden" id="duplicate" value="<?php echo $config['duplicate_files'] ? 1 : 0 ?>"/>
 <input type="hidden" id="base_url" value="<?php echo $config['base_url'] ?>"/>
 <input type="hidden" id="fldr_value" value="<?php echo $subdir; ?>"/>
+<input type="hidden" id="base_fldr" value="<?php echo $rfm_subfolder; ?>"/>
 <input type="hidden" id="sub_folder" value="<?php echo $rfm_subfolder; ?>"/>
 <input type="hidden" id="return_relative_url" value="<?php echo $return_relative_url == true ? 1 : 0; ?>"/>
 <input type="hidden" id="file_number_limit_js" value="<?php echo $config['file_number_limit_js']; ?>"/>
@@ -1056,8 +1063,8 @@ $get_params = http_build_query($get_params);
                         }
                         //add in thumbs folder if not exist
                         if ($file != '..') {
-                            if (!$ftp && !file_exists($thumbs_path . $file)) {
-                                RFM::createFolder(false, $thumbs_path . $file, $ftp, $config);
+                            if (!$ftp && !file_exists(public_path($thumbs_path . $file))) {
+                                RFM::createFolder(false, public_path($thumbs_path . $file), $ftp, $config);
                             }
                         }
 
@@ -1208,12 +1215,15 @@ $get_params = http_build_query($get_params);
                                 $creation_thumb_path = $mini_src = $src_thumb = $thumbs_path . $file;
 
                                 if (!file_exists($src_thumb)) {
-                                    if (!RFM::createImg($ftp, __DIR__ . '/' . $file_path, __DIR__ . '/' . $creation_thumb_path, 122, 91, 'crop', $config)) {
+                                    if (!RFM::createImg($ftp, public_path($file_path), public_path($creation_thumb_path), 122, 91, 'crop', $config)) {
                                         $src_thumb = $mini_src = "";
                                     }
+                                    /*if (!RFM::createImg($ftp, __DIR__ . '/' . $file_path, __DIR__ . '/' . $creation_thumb_path, 122, 91, 'crop', $config)) {
+                                        $src_thumb = $mini_src = "";
+                                    }*/
                                 }
                                 //check if is smaller than thumb
-                                list($img_width, $img_height, $img_type, $attr) = @getimagesize($file_path);
+                                list($img_width, $img_height, $img_type, $attr) = @getimagesize(public_path($file_path));
                                 if ($img_width < 122 && $img_height < 91) {
                                     $src_thumb = $file_path;
                                     $show_original = true;
