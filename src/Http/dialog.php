@@ -1,8 +1,8 @@
 <?php
 
-use \ZanySoft\FtpClient\FtpException;
-use \Illuminate\Support\Str;
-use \ZanySoft\ResponsiveFileManager\RFM;
+use Illuminate\Support\Str;
+use ZanySoft\FtpClient\FtpException;
+use ZanySoft\ResponsiveFileManager\RFM;
 
 session()->start();
 
@@ -1215,12 +1215,13 @@ $get_params = http_build_query($get_params);
                                 $creation_thumb_path = $mini_src = $src_thumb = $thumbs_path . $file;
 
                                 if (!file_exists($src_thumb)) {
-                                    if (!RFM::createImg($ftp, public_path($file_path), public_path($creation_thumb_path), 122, 91, 'crop', $config)) {
+                                    try {
+                                        if (!RFM::createImg($ftp, public_path($file_path), public_path($creation_thumb_path), 122, 91, 'crop', $config)) {
+                                            $src_thumb = $mini_src = "";
+                                        }
+                                    } catch (\Exception $e) {
                                         $src_thumb = $mini_src = "";
                                     }
-                                    /*if (!RFM::createImg($ftp, __DIR__ . '/' . $file_path, __DIR__ . '/' . $creation_thumb_path, 122, 91, 'crop', $config)) {
-                                        $src_thumb = $mini_src = "";
-                                    }*/
                                 }
                                 //check if is smaller than thumb
                                 list($img_width, $img_height, $img_type, $attr) = @getimagesize(public_path($file_path));
