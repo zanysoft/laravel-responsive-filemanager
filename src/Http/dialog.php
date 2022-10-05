@@ -476,7 +476,8 @@ $get_params = http_build_query($get_params);
 <input type="hidden" id="file_number_limit_js" value="<?php echo $config['file_number_limit_js']; ?>"/>
 <input type="hidden" id="sort_by" value="<?php echo $sort_by; ?>"/>
 <input type="hidden" id="descending" value="<?php echo $descending ? 1 : 0; ?>"/>
-<input type="hidden" id="current_url" value="<?php echo str_replace(array('&filter=' . $filter, '&sort_by=' . $sort_by, '&descending=' . intval($descending)), array(''), $config['base_url'] . htmlspecialchars($_SERVER['REQUEST_URI'])); ?>"/>
+<input type="hidden" id="request_uri" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']) ?>"/>
+<input type="hidden" id="current_url" value="<?php echo str_replace(array('&filter=' . $filter, '&sort_by=' . $sort_by, '&descending=' . intval($descending)), array(''), $config['base_url'] . ltrim(htmlspecialchars($_SERVER['REQUEST_URI']),'/')); ?>"/>
 <input type="hidden" id="lang_show_url" value="<?php echo __('Show_url'); ?>"/>
 <input type="hidden" id="copy_cut_files_allowed" value="<?php echo $config['copy_cut_files'] ? 1 : 0; ?>"/>
 <input type="hidden" id="copy_cut_dirs_allowed" value="<?php echo $config['copy_cut_dirs'] ? 1 : 0; ?>"/>
