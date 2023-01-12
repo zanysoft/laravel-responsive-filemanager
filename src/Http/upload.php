@@ -1,10 +1,10 @@
 <?php
 
-use \Exception as _Exception;
-use \stdClass as _stdClass;
-use \ZanySoft\ResponsiveFileManager\RFM;
-use \ZanySoft\ResponsiveFileManager\UploadHandler;
-use \ZanySoft\ResponsiveFileManager\Lib\RfmMimeTypesLib;
+use Exception as _Exception;
+use stdClass as _stdClass;
+use ZanySoft\ResponsiveFileManager\Lib\RfmMimeTypesLib;
+use ZanySoft\ResponsiveFileManager\RFM;
+use ZanySoft\ResponsiveFileManager\UploadHandler;
 
 $config = config('rfm');
 
@@ -127,15 +127,20 @@ try {
     if ($config['lower_case']) {
         $_FILES['files']['name'][0] = RFM::fixStrtolower($_FILES['files']['name'][0]);
     }
+
+    if ($config['convert_spaces']) {
+        $_FILES['files']['name'][0] = str_replace(' ', $config['replace_with'], $_FILES['files']['name'][0]);
+    }
+
     if (!RFM::checkresultingsize($_FILES['files']['size'][0])) {
         if (!isset($upload_handler->response['files'][0])) {
             // Avoid " Warning: Creating default object from empty value ... "
             $upload_handler->response['files'][0] = new _stdClass();
         }
         $upload_handler->response['files'][0]->error = __(
-            'max_size_reached',
-            ['size' => $config['MaxSizeTotal']]
-        ).RFM::addErrorLocation();
+                'max_size_reached',
+                ['size' => $config['MaxSizeTotal']]
+            ) . RFM::addErrorLocation();
         echo json_encode($upload_handler->response);
         exit();
     }

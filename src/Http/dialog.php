@@ -477,7 +477,7 @@ $get_params = http_build_query($get_params);
 <input type="hidden" id="sort_by" value="<?php echo $sort_by; ?>"/>
 <input type="hidden" id="descending" value="<?php echo $descending ? 1 : 0; ?>"/>
 <input type="hidden" id="request_uri" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']) ?>"/>
-<input type="hidden" id="current_url" value="<?php echo str_replace(array('&filter=' . $filter, '&sort_by=' . $sort_by, '&descending=' . intval($descending)), array(''), $config['base_url'] . ltrim(htmlspecialchars($_SERVER['REQUEST_URI']),'/')); ?>"/>
+<input type="hidden" id="current_url" value="<?php echo str_replace(array('&filter=' . $filter, '&sort_by=' . $sort_by, '&descending=' . intval($descending)), array(''), $config['base_url'] . ltrim(htmlspecialchars($_SERVER['REQUEST_URI']), '/')); ?>"/>
 <input type="hidden" id="lang_show_url" value="<?php echo __('Show_url'); ?>"/>
 <input type="hidden" id="copy_cut_files_allowed" value="<?php echo $config['copy_cut_files'] ? 1 : 0; ?>"/>
 <input type="hidden" id="copy_cut_dirs_allowed" value="<?php echo $config['copy_cut_dirs'] ? 1 : 0; ?>"/>
@@ -599,6 +599,9 @@ $get_params = http_build_query($get_params);
                                         </td>
                                     </tr>
                                 {% } %}
+
+
+                            
                             </script>
                             <!-- The template to display files available for download -->
                             <script id="template-download" type="text/x-tmpl">
@@ -631,6 +634,9 @@ $get_params = http_build_query($get_params);
                                         <td></td>
                                     </tr>
                                 {% } %}
+
+
+                            
                             </script>
                         </div>
                         <?php if ($config['url_upload']) { ?>
@@ -1250,7 +1256,11 @@ $get_params = http_build_query($get_params);
                             $is_icon_thumb = true;
                         } else {
                             // is FTP but not support ted thumbnail generated (only gif,jpeg,png)
-                            if (!preg_match('/(gif|svg|jpe?g|png|webp)$/i', $file_array['extension'])) {
+                            $_ext_img = 'gif|svg|jpe?g|png|webp';
+                            if (is_array($config['ext_img']) && !empty($config['ext_img'])) {
+                                $_ext_img = implode('|', $config['ext_img']);
+                            }
+                            if (!preg_match('/(' . $_ext_img . ')$/i', $file_array['extension'])) {
                                 $src_thumb = $vendor_path . 'img/' . $config['icon_theme'] . '/' . $file_array['extension'] . ".jpg";
                                 $is_icon_thumb = true;
                             }
