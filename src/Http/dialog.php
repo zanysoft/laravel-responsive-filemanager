@@ -599,9 +599,6 @@ $get_params = http_build_query($get_params);
                                         </td>
                                     </tr>
                                 {% } %}
-
-
-                            
                             </script>
                             <!-- The template to display files available for download -->
                             <script id="template-download" type="text/x-tmpl">
@@ -634,9 +631,6 @@ $get_params = http_build_query($get_params);
                                         <td></td>
                                     </tr>
                                 {% } %}
-
-
-                            
                             </script>
                         </div>
                         <?php if ($config['url_upload']) { ?>
@@ -1062,7 +1056,7 @@ $get_params = http_build_query($get_params);
                         if ($file == '.' || (substr($file, 0, 1) == '.' && isset($file_array['extension']) && $file_array['extension'] == RFM::fixStrtolower(__('Type_dir'))) || (isset($file_array['extension']) && $file_array['extension'] != RFM::fixStrtolower(__('Type_dir'))) || ($file == '..' && $subdir == '') || in_array($file, $config['hidden_folders']) || ($filter != '' && $n_files > $config['file_number_limit_js'] && $file != ".." && stripos($file, $filter) === false)) {
                             continue;
                         }
-                        $new_name = RFM::fixFilename($file, $config);
+                        $new_name = RFM::fixFilename($file, $config, false, false);
                         if ($ftp && $file != '..' && $file != $new_name) {
                             //rename
                             RFM::renameFolder($config['current_path'] . $subdir . $file, $new_name, $ftp, $config);
@@ -1117,40 +1111,38 @@ $get_params = http_build_query($get_params);
                                         </div>
                                     </div>
                                     <?php if ($file == "..") { ?>
-                                    <div class="box no-effect">
-                                        <h4><?php echo __('Back') ?></h4>
+                                        <div class="box no-effect">
+                                            <h4><?php echo __('Back') ?></h4>
+                                        </div>
+                                    <?php } ?>
+                                </a>
+                                <?php if ($file != "..") { ?>
+                                    <div class="box">
+                                        <h4 class="<?php echo($config['ellipsis_title_after_first_row'] ? "ellipsis" : ""); ?>"><a class="folder-link" data-file="<?php echo $file ?>" href="dialog.php?<?php echo $get_params . rawurlencode($src) . "&" . uniqid() ?>"><?php echo $file; ?></a></h4>
                                     </div>
-                                </a>
-
-                            <?php } else { ?>
-                                </a>
-                                <div class="box">
-                                    <h4 class="<?php echo($config['ellipsis_title_after_first_row'] ? "ellipsis" : ""); ?>"><a class="folder-link" data-file="<?php echo $file ?>" href="dialog.php?<?php echo $get_params . rawurlencode($src) . "&" . uniqid() ?>"><?php echo $file; ?></a></h4>
-                                </div>
-                                <input type="hidden" class="name" value="<?php echo $file_array['file_lcase']; ?>"/>
-                                <input type="hidden" class="date" value="<?php echo $file_array['date']; ?>"/>
-                                <input type="hidden" class="size" value="<?php echo $file_array['size']; ?>"/>
-                                <input type="hidden" class="extension" value="<?php echo RFM::fixStrtolower(__('Type_dir')); ?>"/>
-                                <div class="file-date"><?php echo date(__('Date_type'), $file_array['date']); ?></div>
-                                <?php if ($config['show_folder_size']) { ?>
-                                    <div class="file-size"><?php echo RFM::makeSize($file_array['size']); ?></div>
-                                    <input type="hidden" class="nfiles" value="<?php echo $file_array['nfiles']; ?>"/>
-                                    <input type="hidden" class="nfolders" value="<?php echo $file_array['nfolders']; ?>"/>
+                                    <input type="hidden" class="name" value="<?php echo $file_array['file_lcase']; ?>"/>
+                                    <input type="hidden" class="date" value="<?php echo $file_array['date']; ?>"/>
+                                    <input type="hidden" class="size" value="<?php echo $file_array['size']; ?>"/>
+                                    <input type="hidden" class="extension" value="<?php echo RFM::fixStrtolower(__('Type_dir')); ?>"/>
+                                    <div class="file-date"><?php echo date(__('Date_type'), $file_array['date']); ?></div>
+                                    <?php if ($config['show_folder_size']) { ?>
+                                        <div class="file-size"><?php echo RFM::makeSize($file_array['size']); ?></div>
+                                        <input type="hidden" class="nfiles" value="<?php echo $file_array['nfiles']; ?>"/>
+                                        <input type="hidden" class="nfolders" value="<?php echo $file_array['nfolders']; ?>"/>
+                                    <?php } ?>
+                                    <div class='file-extension'><?php echo RFM::fixStrtolower(__('Type_dir')); ?></div>
+                                    <figcaption>
+                                        <a href="javascript:void('')" class="tip-left edit-button rename-file-paths <?php echo ($config['rename_folders'] && !$file_prevent_rename) ? "rename-folder" : ""; ?>" title="<?php echo __('Rename') ?>" data-folder="1" data-permissions="<?php echo $file_array['permissions']; ?>">
+                                            <i class="icon-pencil <?php echo (!$config['rename_folders'] || $file_prevent_rename) ? 'icon-white' : ''; ?>"></i></a>
+                                        <a href="javascript:void('')" class="tip-left erase-button <?php echo ($config['delete_folders'] && !$file_prevent_delete) ? "delete-folder" : ""; ?>" title="<?php echo __('Erase') ?>" data-confirm="<?php echo __('Confirm_Folder_del'); ?>">
+                                            <i class="icon-trash <?php echo (!$config['delete_folders'] || $file_prevent_delete) ? 'icon-white' : ''; ?>"></i>
+                                        </a>
+                                    </figcaption>
                                 <?php } ?>
-                                <div class='file-extension'><?php echo RFM::fixStrtolower(__('Type_dir')); ?></div>
-                                <figcaption>
-                                    <a href="javascript:void('')" class="tip-left edit-button rename-file-paths <?php echo ($config['rename_folders'] && !$file_prevent_rename) ? "rename-folder" : ""; ?>" title="<?php echo __('Rename') ?>" data-folder="1" data-permissions="<?php echo $file_array['permissions']; ?>">
-                                        <i class="icon-pencil <?php echo (!$config['rename_folders'] || $file_prevent_rename) ? 'icon-white' : ''; ?>"></i></a>
-                                    <a href="javascript:void('')" class="tip-left erase-button <?php echo ($config['delete_folders'] && !$file_prevent_delete) ? "delete-folder" : ""; ?>" title="<?php echo __('Erase') ?>" data-confirm="<?php echo __('Confirm_Folder_del'); ?>">
-                                        <i class="icon-trash <?php echo (!$config['delete_folders'] || $file_prevent_delete) ? 'icon-white' : ''; ?>"></i>
-                                    </a>
-                                </figcaption>
-                            <?php } ?>
                             </figure>
                         </li>
                         <?php
                     }
-
 
                     $files_prevent_duplicate = array();
                     foreach ($files as $nu => $file_array) {
@@ -1171,9 +1163,8 @@ $get_params = http_build_query($get_params);
                         if (!$ftp) {
                             $file_path = '/' . $config['current_path'] . $rfm_subfolder . $subdir . $file;
                             //check if file have illegal caracter
-
-                            if ($file != RFM::fixFilename($file, $config)) {
-                                $file1 = RFM::fixFilename($file, $config);
+                            if ($file != RFM::fixFilename($file, $config, false, false)) {
+                                $file1 = RFM::fixFilename($file, $config, false, false);
                                 $file_path1 = ($config['current_path'] . $rfm_subfolder . $subdir . $file1);
                                 if (file_exists($file_path1)) {
                                     $i = 1;
@@ -1189,7 +1180,7 @@ $get_params = http_build_query($get_params);
                                 if (strlen($file_array['extension']) === 0) {
                                     $filename = $file1;
                                 }
-                                RFM::renameFile($file_path, RFM::fixFilename($filename, $config), $ftp, $config);
+                                RFM::renameFile(public_path(trim($file_path, '/')), RFM::fixFilename($filename, $config, false, false), $ftp, $config);
                                 $file = $file1;
                                 $file_array['extension'] = RFM::fixFilename($file_array['extension'], $config);
                                 $file_path = $file_path1;

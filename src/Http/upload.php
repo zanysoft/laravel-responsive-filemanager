@@ -118,7 +118,7 @@ try {
     } else {
         $filename = $_FILES['files']['name'][0];
     }
-    $_FILES['files']['name'][0] = RFM::fixGetParams($filename, $config);
+    $_FILES['files']['name'][0] = RFM::fixFilename($filename, $config, false, true);
 
     if (!$_FILES['files']['type'][0]) {
         $_FILES['files']['type'][0] = $mime_type;
@@ -126,10 +126,6 @@ try {
     // LowerCase
     if ($config['lower_case']) {
         $_FILES['files']['name'][0] = RFM::fixStrtolower($_FILES['files']['name'][0]);
-    }
-
-    if ($config['convert_spaces']) {
-        $_FILES['files']['name'][0] = str_replace(' ', $config['replace_with'], $_FILES['files']['name'][0]);
     }
 
     if (!RFM::checkresultingsize($_FILES['files']['size'][0])) {

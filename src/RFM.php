@@ -299,7 +299,6 @@ class RFM
         if ($ftp) {
             try {
                 $tmp = self::tempdir() . '/' . time() . $name . "." . $info['extension'];
-                // dd($tmp, "/".$old_path);
                 $ftp->get($tmp, "/" . $old_path, FTP_BINARY);
                 $ftp->put("/" . $new_path, $tmp, FTP_BINARY);
                 unlink($tmp);
@@ -352,7 +351,6 @@ class RFM
                 if (file_exists($new_path) && $old_path == $new_path) {
                     return false;
                 }
-
                 return rename($old_path, $new_path);
             }
         }
@@ -753,19 +751,17 @@ class RFM
     /**
      * Cleanup filename
      *
-     * @static
-     * @param string $str
-     * @param bool $transliteration
-     * @param bool $convert_spaces
-     * @param string $replace_with
-     * @param bool $is_folder
-     *
+     * @param $str
+     * @param $config
+     * @param $is_folder
+     * @param $convert_spaces
      * @return string
      */
-    public static function fixFilename($str, $config, $is_folder = false)
+    public static function fixFilename($str, $config, $is_folder = false, $convert_spaces = true)
     {
         $str = self::sanitize($str);
-        if ($config['convert_spaces']) {
+        
+        if ($convert_spaces && $config['convert_spaces']) {
             $str = str_replace(' ', $config['replace_with'], $str);
         }
 
