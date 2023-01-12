@@ -1250,7 +1250,7 @@ $get_params = http_build_query($get_params);
                             $is_icon_thumb = true;
                         } else {
                             // is FTP but not support ted thumbnail generated (only gif,jpeg,png)
-                            if (!preg_match('/(gif|svg|jpe?g|png)$/i', $file_array['extension'])) {
+                            if (!preg_match('/(gif|svg|jpe?g|png|webp)$/i', $file_array['extension'])) {
                                 $src_thumb = $vendor_path . 'img/' . $config['icon_theme'] . '/' . $file_array['extension'] . ".jpg";
                                 $is_icon_thumb = true;
                             }
