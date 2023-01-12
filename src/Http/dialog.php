@@ -1056,7 +1056,7 @@ $get_params = http_build_query($get_params);
                         if ($file == '.' || (substr($file, 0, 1) == '.' && isset($file_array['extension']) && $file_array['extension'] == RFM::fixStrtolower(__('Type_dir'))) || (isset($file_array['extension']) && $file_array['extension'] != RFM::fixStrtolower(__('Type_dir'))) || ($file == '..' && $subdir == '') || in_array($file, $config['hidden_folders']) || ($filter != '' && $n_files > $config['file_number_limit_js'] && $file != ".." && stripos($file, $filter) === false)) {
                             continue;
                         }
-                        $new_name = RFM::fixFilename($file, $config, false, false);
+                        $new_name = RFM::fixFilename($file, $config);
                         if ($ftp && $file != '..' && $file != $new_name) {
                             //rename
                             RFM::renameFolder($config['current_path'] . $subdir . $file, $new_name, $ftp, $config);
@@ -1163,8 +1163,8 @@ $get_params = http_build_query($get_params);
                         if (!$ftp) {
                             $file_path = '/' . $config['current_path'] . $rfm_subfolder . $subdir . $file;
                             //check if file have illegal caracter
-                            if ($file != RFM::fixFilename($file, $config, false, false)) {
-                                $file1 = RFM::fixFilename($file, $config, false, false);
+                            if ($file != RFM::fixFilename($file, $config)) {
+                                $file1 = RFM::fixFilename($file, $config);
                                 $file_path1 = ($config['current_path'] . $rfm_subfolder . $subdir . $file1);
                                 if (file_exists($file_path1)) {
                                     $i = 1;
@@ -1180,7 +1180,7 @@ $get_params = http_build_query($get_params);
                                 if (strlen($file_array['extension']) === 0) {
                                     $filename = $file1;
                                 }
-                                RFM::renameFile(public_path(trim($file_path, '/')), RFM::fixFilename($filename, $config, false, false), $ftp, $config);
+                                RFM::renameFile(public_path(trim($file_path, '/')), RFM::fixFilename($filename, $config), $ftp, $config);
                                 $file = $file1;
                                 $file_array['extension'] = RFM::fixFilename($file_array['extension'], $config);
                                 $file_path = $file_path1;
