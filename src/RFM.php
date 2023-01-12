@@ -760,9 +760,12 @@ class RFM
     public static function fixFilename($str, $config, $is_folder = false, $convert_spaces = true)
     {
         $str = self::sanitize($str);
-        
-        if ($convert_spaces && $config['convert_spaces']) {
-            $str = str_replace(' ', $config['replace_with'], $str);
+
+        if ($convert_spaces && $config['convert_spaces'] && trim($config['replace_with']) != '') {
+            $replace_with = trim($config['replace_with']);
+            $str = str_replace(' ', $replace_with, $str);
+            $str = preg_replace('/' . $replace_with . '+/', $replace_with, $str);
+            $str = str_replace($replace_with . '.', '.', $str);
         }
 
         if ($config['transliteration']) {
@@ -778,8 +781,8 @@ class RFM
             $str = preg_replace("/[^a-zA-Z0-9\.\[\]_| -]/", '', $str);
         }
 
-        $str = str_replace(array('"', "'", "/", "\\"), "", $str);
-        $str = strip_tags($str);
+        $str = str_replace(['-.', '_.', ' .'], '.', trim(strip_tags($str), '-_ '));
+        $str = preg_replace("/[^a-zA-Z0-9\.\[\]\(\)_| -]/", '', $str);
 
         // Empty or incorrectly transliterated filename.
         // Here is a point: a good file UNKNOWN_LANGUAGE.jpg could become .jpg in previous code.
