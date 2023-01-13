@@ -768,6 +768,10 @@ class RFM
             $str = str_replace($replace_with . '.', '.', $str);
         }
 
+        if ($config['lower_case']) {
+            $str = RFM::fixStrtolower($str);
+        }
+
         if ($config['transliteration']) {
             if (!mb_detect_encoding($str, 'UTF-8', true)) {
                 $str = utf8_encode($str);
