@@ -2,9 +2,8 @@
 
 namespace ZanySoft\ResponsiveFileManager;
 
-use \Exception as _Exception;
-use \stdClass as _stdClass;
-use ZanySoft\ResponsiveFileManager\RFM;
+use Exception as _Exception;
+use stdClass as _stdClass;
 use ZanySoft\ResponsiveFileManager\Lib\ImageLib;
 
 class UploadHandler
@@ -74,12 +73,12 @@ class UploadHandler
             ),
             // By default, allow redirects to the referer protocol+host:
             'redirect_allow_target' => '/^' . preg_quote(
-                parse_url($this->getServerVar('HTTP_REFERER'), PHP_URL_SCHEME)
+                    parse_url($this->getServerVar('HTTP_REFERER'), PHP_URL_SCHEME)
                     . '://'
                     . parse_url($this->getServerVar('HTTP_REFERER'), PHP_URL_HOST)
                     . '/', // Trailing slash to not match subdomains by mistake
-                '/' // preg_quote delimiter param
-            ) . '/',
+                    '/' // preg_quote delimiter param
+                ) . '/',
             // Enable to provide file downloads via GET requests to the PHP script:
             //     1. Set to 1 to download files via readfile method through PHP
             //     2. Set to 2 to send a X-Sendfile header for lighttpd/Apache
@@ -233,8 +232,8 @@ class UploadHandler
             (!empty($_SERVER['REMOTE_USER']) ? $_SERVER['REMOTE_USER'] . '@' : '') .
             (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'] .
                 ($https &&
-                    $_SERVER['SERVER_PORT'] === 443 ||
-                    $_SERVER['SERVER_PORT'] === 80 ? '' : ':' . $_SERVER['SERVER_PORT']))) .
+                $_SERVER['SERVER_PORT'] === 443 ||
+                $_SERVER['SERVER_PORT'] === 80 ? '' : ':' . $_SERVER['SERVER_PORT']))) .
             substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/'));
     }
 
@@ -397,17 +396,17 @@ class UploadHandler
         $val = trim($val);
         $last = strtolower($val[strlen($val) - 1]);
         if (is_numeric($val)) {
-            $val = (int) $val;
+            $val = (int)$val;
         } else {
-            $val = (int) substr($val, 0, -1);
+            $val = (int)substr($val, 0, -1);
         }
         switch ($last) {
             case 'g':
                 $val *= 1024;
-                // no break
+            // no break
             case 'm':
                 $val *= 1024;
-                // no break
+            // no break
             case 'k':
                 $val *= 1024;
         }
@@ -421,7 +420,7 @@ class UploadHandler
             return false;
         }
         $content_length = $this->fixIntegerOverflow(
-            (int) $this->getServerVar('CONTENT_LENGTH')
+            (int)$this->getServerVar('CONTENT_LENGTH')
         );
         $post_max_size = $this->getConfigBytes(ini_get('post_max_size'));
         if ($post_max_size && ($content_length > $post_max_size)) {
@@ -473,7 +472,7 @@ class UploadHandler
             if (
                 @$this->options['image_versions']['']['auto_orient'] &&
                 function_exists('exif_read_data') &&
-                ($exif = @exif_read_data($uploaded_file)) && (((int) @$exif['Orientation']) >= 5)
+                ($exif = @exif_read_data($uploaded_file)) && (((int)@$exif['Orientation']) >= 5)
             ) {
                 $tmp = $img_width;
                 $img_width = $img_height;
@@ -504,7 +503,7 @@ class UploadHandler
 
     protected function upcountNameCallback($matches)
     {
-        $index = isset($matches[1]) ? ((int) $matches[1]) + 1 : 1;
+        $index = isset($matches[1]) ? ((int)$matches[1]) + 1 : 1;
         $ext = isset($matches[2]) ? $matches[2] : '';
         return ' (' . $index . ')' . $ext;
     }
@@ -527,16 +526,17 @@ class UploadHandler
         $error,
         $index,
         $content_range
-    ) {
+    )
+    {
         while (is_dir($this->getUploadPath($name))) {
             $name = $this->upcountName($name);
         }
         // Keep an existing filename if this is part of a chunked upload:
-        $uploaded_bytes = $this->fixIntegerOverflow((int) @$content_range[1]);
+        $uploaded_bytes = $this->fixIntegerOverflow((int)@$content_range[1]);
         while (is_file($this->getUploadPath($name))) {
             if ($uploaded_bytes === $this->getFileSize(
-                $this->getUploadPath($name)
-            )) {
+                    $this->getUploadPath($name)
+                )) {
                 break;
             }
             $name = $this->upcountName($name);
@@ -552,7 +552,8 @@ class UploadHandler
         $error,
         $index,
         $content_range
-    ) {
+    )
+    {
         // Add missing file extension for known image types:
         if (
             strpos($name, '.') === false &&
@@ -597,7 +598,8 @@ class UploadHandler
         $error,
         $index,
         $content_range
-    ) {
+    )
+    {
         // Remove path information and dots around the filename, to prevent uploading
         // into different directories or replacing hidden system files.
         // Also remove control characters and spaces (\x00..\x20) around the filename:
@@ -627,7 +629,8 @@ class UploadHandler
         $error,
         $index,
         $content_range
-    ) {
+    )
+    {
         $name = $this->trimFileName(
             $file_path,
             $name,
@@ -708,13 +711,13 @@ class UploadHandler
                 $src_height = -$new_height;
                 break;
             case '2': // flip on the vertical axis
-                $src_x  = $new_width - 1;
+                $src_x = $new_width - 1;
                 $src_width = -$new_width;
                 break;
             case '3': // flip on both axes
                 $src_y = $new_height - 1;
                 $src_height = -$new_height;
-                $src_x  = $new_width - 1;
+                $src_x = $new_width - 1;
                 $src_width = -$new_width;
                 break;
             default:
@@ -744,7 +747,7 @@ class UploadHandler
         if ($exif === false) {
             return false;
         }
-        $orientation = (int) @$exif['Orientation'];
+        $orientation = (int)@$exif['Orientation'];
         if ($orientation < 2 || $orientation > 8) {
             return false;
         }
@@ -837,9 +840,9 @@ class UploadHandler
         );
         $image_oriented = false;
         if (!empty($options['auto_orient']) && $this->gdOrientImage(
-            $file_path,
-            $src_img
-        )) {
+                $file_path,
+                $src_img
+            )) {
             $image_oriented = true;
             $src_img = $this->gdGetImageObject(
                 $file_path,
@@ -891,24 +894,24 @@ class UploadHandler
                 // no break
             case 'png':
                 imagecolortransparent($new_img, imagecolorallocate($new_img, 0, 0, 0));
-                // no break
+            // no break
             case 'png':
                 imagealphablending($new_img, false);
                 imagesavealpha($new_img, true);
                 break;
         }
         $success = imagecopyresampled(
-            $new_img,
-            $src_img,
-            $dst_x,
-            $dst_y,
-            0,
-            0,
-            $new_width,
-            $new_height,
-            $img_width,
-            $img_height
-        ) && $write_func($new_img, $new_file_path, $image_quality);
+                $new_img,
+                $src_img,
+                $dst_x,
+                $dst_y,
+                0,
+                0,
+                $new_width,
+                $new_height,
+                $img_width,
+                $img_height
+            ) && $write_func($new_img, $new_file_path, $image_quality);
         $this->gdSetImageObject($file_path, $new_img);
         return $success;
     }
@@ -1242,7 +1245,8 @@ class UploadHandler
         $error,
         $index = null,
         $content_range = null
-    ) {
+    )
+    {
         $file = new _stdClass();
         $file->name = $this->getFileName(
             $uploaded_file,
@@ -1253,7 +1257,7 @@ class UploadHandler
             $index,
             $content_range
         );
-        $file->size = $this->fixIntegerOverflow((int) $size);
+        $file->size = $this->fixIntegerOverflow((int)$size);
         $file->type = $type;
         if ($this->validate($uploaded_file, $file, $error, $index)) {
             $this->handleFormData($file, $index);
@@ -1391,6 +1395,8 @@ class UploadHandler
                 return 'image/png';
             case 'gif':
                 return 'image/gif';
+            case 'webp':
+                return 'image/webp';
             default:
                 return '';
         }
@@ -1475,7 +1481,7 @@ class UploadHandler
                 $files = isset($content[$this->options['param_name']]) ?
                     $content[$this->options['param_name']] : null;
                 if ($files && is_array($files) && is_object($files[0]) && $files[0]->size) {
-                    $this->header('Range: 0-' . ($this->fixIntegerOverflow((int) $files[0]->size) - 1));
+                    $this->header('Range: 0-' . ($this->fixIntegerOverflow((int)$files[0]->size) - 1));
                 }
             }
             $this->body($json);
@@ -1576,7 +1582,7 @@ class UploadHandler
         $name = $file_name ? $file_name : $upload['name'][0];
         $res = $this->generateResponse($response, $print_response);
         if (is_file($this->getUploadPath($name))) {
-            $uploaded_bytes = $this->fixIntegerOverflow((int) @$content_range[1]);
+            $uploaded_bytes = $this->fixIntegerOverflow((int)@$content_range[1]);
             $totalSize = $this->getFileSize($this->getUploadPath($name));
             if ($totalSize - $uploaded_bytes - $this->options['readfile_chunk_size'] < 0) {
                 $this->onUploadEnd($ftp, $res);
@@ -1597,8 +1603,8 @@ class UploadHandler
         $targetPathThumb = $this->options['storeFolderThumb'];
 
         if (!$this->options['ftp']) {
-            $targetFile =  $targetPath . $res['files'][0]->name;
-            $targetFileThumb =  $targetPathThumb . $res['files'][0]->name;
+            $targetFile = $targetPath . $res['files'][0]->name;
+            $targetFileThumb = $targetPathThumb . $res['files'][0]->name;
             if (!is_dir($targetPathThumb)) {
                 mkdir($targetPathThumb, $this->options['mkdir_mode'], true);
             }
@@ -1609,7 +1615,7 @@ class UploadHandler
             }
         } else {
             $targetFile = $this->options['config']['ftp_temp_folder'] . $res['files'][0]->name;
-            $targetFileThumb =  $this->options['config']['ftp_temp_folder'] . "thumbs/" . $res['files'][0]->name;
+            $targetFileThumb = $this->options['config']['ftp_temp_folder'] . "thumbs/" . $res['files'][0]->name;
         }
 
         //check if image (and supported)
@@ -1629,7 +1635,6 @@ class UploadHandler
 
                 $magicianObj->saveImage($targetFile);
             }
-
 
 
             $thumbResult = RFM::createImg($ftp, $targetFile, $targetFileThumb, 122, 91);

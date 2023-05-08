@@ -26,6 +26,11 @@ class FileManagerServiceProvider extends ServiceProvider
     {
         $this->commands($this->commands);
 
+        if (file_exists(resource_path('lang/vendor/rfm'))) {
+            $this->loadJsonTranslationsFrom(resource_path('lang/vendor/rfm'));
+        } else {
+            $this->loadJsonTranslationsFrom(__DIR__ . '/I18N');
+        }
         require_once 'Helpers/helpers.php';
     }
 
@@ -83,8 +88,6 @@ class FileManagerServiceProvider extends ServiceProvider
 
         // Add package routes.
         $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
-        $this->loadJsonTranslationsFrom(__DIR__ . '/I18N');
-
 
         /**
          * Blade print
