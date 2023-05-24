@@ -396,7 +396,7 @@ var encodeURL, show_animation, hide_animation, apply, apply_none, apply_img, app
             grid.on('click', '.preview', function () {
                 var _this = jQuery(this);
                 if (_this.hasClass('disabled') == false) {
-                    jQuery('#full-img').attr('src', decodeURIComponent(_this.attr('data-url')));
+                    //jQuery('#full-img').attr('src', decodeURIComponent(_this.attr('data-url')));
                 }
                 return true;
             });
