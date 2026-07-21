@@ -1,10 +1,11 @@
-# Laravel-Responsive-FileManager
 
-[![Downloads](https://img.shields.io/packagist/dt/zanysoft/laravel-responsive-filemanager.svg?style=flat-square)](https://packagist.org/packages/zanysoft/laravel-responsive-filemanager)
-[![GitHub license](https://img.shields.io/badge/License-MIT-informational.svg)](https://github.com/zanysoft/laravel-responsive-filemanager/blob/master/LICENSE)
 [![GitHub license](https://img.shields.io/badge/Licence-CC%20BY%20NC%203.0-informational.svg)](https://creativecommons.org/licenses/by-nc/3.0/)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-informational.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
-[![GitHub tag](https://img.shields.io/github/tag/ZanySoft/laravel-responsive-filemanager.svg?style=flat&logo=laravel&color=informational)](https://github.com/zanysoft/laravel-responsive-filemanager/tags)
+[![Total Downloads][ico-downloads]][link-downloads]
+[![Version][ico-version]][link-packagist]
+[![Maintained][ico-maintained]][link-maintained]
+[![Framwork][ico-framwork]][link-framwork]
+
+# Laravel-Responsive-FileManager
 
 This software includes a modified version of [Responsive File Manager](https://github.com/trippo/ResponsiveFilemanager) *see [official website](https://responsivefilemanager.com/)*
 
@@ -153,3 +154,19 @@ with tinymce parameters
     });
 
 **To make private folder use .htaccess with ```Deny from all```**
+
+## Issues
+
+If you discover any issues, please email me at [zanysoft.us@gmail.com][email-me] instead of using the issue tracker.
+
+[ico-version]: https://img.shields.io/packagist/v/zanysoft/laravel-responsive-filemanager.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-informational.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/zanysoft/laravel-responsive-filemanager.svg?style=flat-square
+[ico-maintained]: https://img.shields.io/badge/Maintained-yes-informational.svg?style=flat-square&label=Maintained
+[ico-framwork]: https://img.shields.io/badge/Framwork-laravel-orange?style=flat-square&color=F05340
+
+[link-packagist]: https://packagist.org/packages/zanysoft/laravel-responsive-filemanager
+[link-downloads]: https://github.com/zanysoft/laravel-responsive-filemanager
+[link-maintained]: https://github.com/zanysoft/laravel-zip/graphs/commit-activity
+[link-framwork]: https://laravel.com/
+[email-me]: mailto:zanysoft.us@gmail.com
